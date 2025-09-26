@@ -1,6 +1,5 @@
 import { useEffect } from "react"
-
-import ShopeeHeader from "@customer/components/ShopeeHeader"
+import { BrowserRouter, Routes } from "react-router-dom"
 
 function Customer() {
   useEffect(function () {
@@ -8,12 +7,11 @@ function Customer() {
   }, [])
 
   return (
-    <>
-      <ShopeeHeader />
-      <p>
-        {import.meta.env.VITE_MODE}
-      </p>
-    </>
+    <BrowserRouter>
+      <Routes>
+
+      </Routes>
+    </BrowserRouter>
   )
 }
 export default Customer

@@ -5,9 +5,11 @@ function Administrator() {
     document.title = import.meta.env.VITE_MODE
   }, [])
   return (
-    <p>
-      {import.meta.env.VITE_MODE}
-    </p>
+    <BrowserRouter>
+      <Routes>
+
+      </Routes>
+    </BrowserRouter>
   )
 }
 export default Administrator
