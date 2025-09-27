@@ -12,7 +12,7 @@
         "src/customer*"
       ],
       "@seller/*": [
-        "src/seller/*"
+        "src/features/seller/*"
       ],
     }
   }

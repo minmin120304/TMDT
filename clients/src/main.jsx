@@ -8,14 +8,14 @@ let App;
 
 switch (mode) {
   case "seller":
-    App = lazy(() => import("./seller"))
+    App = lazy(() => import("./features/seller"))
     break;
   case "administrator":
-    App = lazy(() => import("./administrator"))
+    App = lazy(() => import("./features/administrator"))
     break
   case "customer":
   default:
-    App = lazy(() => import("./customer"))
+    App = lazy(() => import("./features/customer"))
     break;
 }
 
