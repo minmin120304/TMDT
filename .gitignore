@@ -1,3 +1,6 @@
 node_modules
 .env
 .vite
+bin/
+obj/
+Migrations/
