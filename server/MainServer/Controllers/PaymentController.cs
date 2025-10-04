@@ -60,7 +60,7 @@ public class PaymentController(IConfiguration configuration) : ControllerBase
       string vnp_Url = _config["VNPAY:VNP_Url"]!;
       string vnp_ReturnUrl = $"{request.Scheme}://{request.Host}/{_config["VNPAY:vnp_ReturnUrl"]!}";
 
-      var query = HttpContext.Request.Query.ToDictionary(k => k.Key, v => v.Value.ToString());
+      var query = request.Query.ToDictionary(k => k.Key, v => v.Value.ToString());
       VNP_Params _Params = VNP_Params.GetVNP_Params(query);
 
       string hash = VNP_Params.CalcHashSecret(_Params, vnp_HashSecret);
@@ -78,8 +78,45 @@ public class PaymentController(IConfiguration configuration) : ControllerBase
   [HttpGet("ipn")]
   public IActionResult IPN()
   {
-    var query = HttpContext.Request.Query.ToDictionary(k => k.Key, v => v.Value.ToString());
-    return Ok();
+    var request = HttpContext.Request;
+
+    string vnp_HashSecret = _config["VNPAY:VNP_HashSecret"]!;
+    string vnp_TmnCode = _config["VNPAY:VNP_TmnCode"]!;
+    string vnp_Url = _config["VNPAY:VNP_Url"]!;
+    string vnp_ReturnUrl = $"{request.Scheme}://{request.Host}/{_config["VNPAY:vnp_ReturnUrl"]!}";
+
+    var query = request.Query.ToDictionary(k => k.Key, v => v.Value.ToString());
+    VNP_Params _Params = VNP_Params.GetVNP_Params(query);
+    string hash = VNP_Params.CalcHashSecret(_Params, vnp_HashSecret);
+
+    //kiểm tra checksum
+    if (_Params.vnp_SecureHash != hash) return Ok(new { RspCode = "97", Message = "Checksum failed" });
+
+    // Mã đơn hàng "giá trị của vnp_TxnRef" VNPAY phản hồi tồn tại trong CSDL của bạn
+    bool hasOrder = true;
+    if (!hasOrder) return Ok(new { RspCode = "01", Message = "Order not found" });
+
+    // Kiểm tra số tiền "giá trị của vnp_Amout/100" trùng khớp với số tiền của đơn hàng trong CSDL của bạn
+    bool isAmountValid = true;
+    if (!isAmountValid) return Ok(new { RspCode = "04", Message = "Amount invalid" });
+
+    char paymentStatus = '0';
+    return paymentStatus switch
+    {
+      // Giả sử '0' là trạng thái khởi tạo giao dịch, chưa có IPN. Trạng thái này được lưu khi yêu cầu thanh toán chuyển hướng sang Cổng thanh toán VNPAY tại đầu khởi tạo đơn hàng.
+      '0' => Ok(_Params.vnp_ResponseCode == "00" // ''
+                ? new { RspCode = "00", Message = "Success" }
+                : new { RspCode = "00", Message = "Success" }),
+
+      // Giả sử '1' là trạng thái thành công bạn cập nhật sau IPN được gọi và trả kết quả về nó
+      // Giả sử '2' là trạng thái thất bại bạn cập nhật sau IPN được gọi và trả kết quả về nó
+      '1' or '2' => Ok(new
+      {
+        RspCode = "04",
+        Message = "This order has been updated to the payment status"
+      }),
+      _ => Ok(new { query, hash }),
+    };
   }
 }
 
