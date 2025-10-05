@@ -5,6 +5,7 @@ function Seller() {
   useEffect(function () {
     document.title = import.meta.env.VITE_MODE
   }, [])
+
   return (
     <BrowserRouter>
       <Routes>

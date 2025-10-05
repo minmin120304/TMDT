@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
-namespace MainServer.Controllers;
+namespace SellerServer.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

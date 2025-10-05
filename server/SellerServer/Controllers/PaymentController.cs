@@ -7,7 +7,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 
-namespace MainServer.Controllers;
+namespace SellerServer.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -97,7 +97,7 @@ public class PaymentController(IConfiguration configuration) : ControllerBase
     if (!hasOrder) return Ok(new { RspCode = "01", Message = "Order not found" });
 
     // Kiểm tra số tiền "giá trị của vnp_Amout/100" trùng khớp với số tiền của đơn hàng trong CSDL của bạn
-    bool isAmountValid = true;
+    bool isAmountValid = false;
     if (!isAmountValid) return Ok(new { RspCode = "04", Message = "Amount invalid" });
 
     char paymentStatus = '0';
@@ -135,7 +135,6 @@ public class VNP_Params
 
     return sb.ToString();
   }
-
 
   public static VNP_Params GetVNP_Params(Dictionary<string, string> dict)
   {
