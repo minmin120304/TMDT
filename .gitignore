@@ -1,5 +1,7 @@
 node_modules
-.env
+.env.administrator
+.env.customer
+.env.seller
 .vite
 bin/
 obj/

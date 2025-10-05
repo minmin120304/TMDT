@@ -1,42 +1,106 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
+using DatabaseModels;
+using DatabaseModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Utilities;
 
 namespace SellerServer.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IConfiguration config) : ControllerBase
+public class AuthController(IConfiguration config, AppDbContext dbContext) : ControllerBase
 {
   private readonly IConfiguration _config = config;
+  private readonly AppDbContext dbContext = dbContext;
+
+  async Task ValidateRegisterRequest(RegisterRequest request)
+  {
+    if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.MatKhau))
+    {
+      throw new Exception("Invalid input");
+    }
+    if (await dbContext.NguoiDung.FirstOrDefaultAsync(i => i.Email == request.Email) != null)
+    {
+      throw new Exception("Email is existed.");
+    }
+  }
+  [HttpPost("register")]
+  public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+  {
+    try
+    {
+      await ValidateRegisterRequest(request);
+
+      var (hash, salt) = AuthUtilities.GeneratePasswordHash(request.MatKhau!);
+      NguoiDung nguoiDung = new()
+      {
+        Email = request.Email,
+        MatKhauBam = hash,
+        Salt = salt
+      };
+
+      await dbContext.NguoiDung.AddAsync(nguoiDung);
+      await dbContext.SaveChangesAsync();
+
+      return Ok(request);
+    }
+    catch (Exception err)
+    {
+
+      return BadRequest(new
+      {
+        err.Message
+      });
+    }
+  }
 
   [HttpPost("login")]
-  public IActionResult Login([FromBody] LoginRequest request)
+  public async Task<IActionResult> Login([FromBody] LoginRequest request)
   {
-    // ✅ Normally validate user with DB
-    if (request.Username != "test" || request.Password != "123") return Unauthorized();
-
-    var jwtSettings = _config.GetSection("Jwt");
-    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!.PadRight(32)));
-    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-    var claims = new[]
+    try
     {
-      new Claim(ClaimTypes.Name, request.Username),
-      new Claim(ClaimTypes.Role, "Admin") // example role
-    };
+      NguoiDung? nguoiDung = await dbContext.NguoiDung.FirstOrDefaultAsync(i => i.Email == request.MatKhau);
 
-    var token = new JwtSecurityToken(
-        issuer: jwtSettings["Issuer"],
-        audience: jwtSettings["Audience"],
-        claims: claims,
-        expires: DateTime.UtcNow.AddHours(1),
-        signingCredentials: creds
-    );
+      if (nguoiDung == null)
+      {
+        throw new Exception("User not found!");
+      }
+      if (!AuthUtilities.VerifyPassword(request.MatKhau, nguoiDung.MatKhauBam!, nguoiDung.Salt!))
+      {
+        throw new Exception("Invalid request");
+      }
 
-    return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+      var jwtSettings = _config.GetSection("Jwt");
+      var claims = new[]
+      {
+        new Claim(ClaimTypes.Name, request.Email),
+        new Claim(ClaimTypes.Role, "Seller") // example role
+      };
+
+      return Ok(new
+      {
+        token = AuthUtilities.GenerateAuthToken(
+          issuer: jwtSettings["Issuer"]!,
+          audience: jwtSettings["Audience"]!,
+          claims: claims,
+          expires: DateTime.UtcNow.AddDays(1),
+          jwt_key: jwtSettings["Key"]!
+        )
+      });
+    }
+    catch (Exception err)
+    {
+      return BadRequest(new
+      {
+        err.Message
+      });
+    }
   }
 
   [HttpGet("public")]
@@ -52,6 +116,12 @@ public class AuthController(IConfiguration config) : ControllerBase
 
 public class LoginRequest
 {
-  public required string Username { get; set; }
-  public required string Password { get; set; }
+  public required string Email { get; set; }
+  public required string MatKhau { get; set; }
+}
+
+public class RegisterRequest
+{
+  public string? Email { get; set; }
+  public string? MatKhau { get; set; }
 }

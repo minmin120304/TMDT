@@ -1,5 +1,8 @@
 import { useEffect } from "react"
-import { BrowserRouter, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+
+import Login from "./pages/Login"
+import Register from "./pages/Register"
 
 function Seller() {
   useEffect(function () {
@@ -9,7 +12,8 @@ function Seller() {
   return (
     <BrowserRouter>
       <Routes>
-
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   )
