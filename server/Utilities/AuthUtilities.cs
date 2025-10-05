@@ -40,3 +40,10 @@ public static class AuthUtilities
     return new JwtSecurityTokenHandler().WriteToken(token);
   }
 }
+
+public class ResponseFormat
+{
+  public object? Data { get; set; }
+  public string? Message { get; set; }
+  public bool Success { get; set; } = false;
+}

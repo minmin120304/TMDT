@@ -48,14 +48,19 @@ public class AuthController(IConfiguration config, AppDbContext dbContext) : Con
       await dbContext.NguoiDung.AddAsync(nguoiDung);
       await dbContext.SaveChangesAsync();
 
-      return Ok(request);
+      return Ok(new ResponseFormat
+      {
+        Message = "Success",
+        Success = true
+      });
     }
     catch (Exception err)
     {
 
-      return BadRequest(new
+      return BadRequest(new ResponseFormat
       {
-        err.Message
+        Message = err.Message,
+        Success = false,
       });
     }
   }
@@ -65,12 +70,13 @@ public class AuthController(IConfiguration config, AppDbContext dbContext) : Con
   {
     try
     {
-      NguoiDung? nguoiDung = await dbContext.NguoiDung.FirstOrDefaultAsync(i => i.Email == request.MatKhau);
+      NguoiDung? nguoiDung = await dbContext.NguoiDung.FirstOrDefaultAsync(i => i.Email == request.Email);
 
       if (nguoiDung == null)
       {
         throw new Exception("User not found!");
       }
+
       if (!AuthUtilities.VerifyPassword(request.MatKhau, nguoiDung.MatKhauBam!, nguoiDung.Salt!))
       {
         throw new Exception("Invalid request");
@@ -83,9 +89,11 @@ public class AuthController(IConfiguration config, AppDbContext dbContext) : Con
         new Claim(ClaimTypes.Role, "Seller") // example role
       };
 
-      return Ok(new
+      return Ok(new ResponseFormat
       {
-        token = AuthUtilities.GenerateAuthToken(
+        Success = true,
+        Message = "",
+        Data = AuthUtilities.GenerateAuthToken(
           issuer: jwtSettings["Issuer"]!,
           audience: jwtSettings["Audience"]!,
           claims: claims,
@@ -96,9 +104,10 @@ public class AuthController(IConfiguration config, AppDbContext dbContext) : Con
     }
     catch (Exception err)
     {
-      return BadRequest(new
+      return BadRequest(new ResponseFormat
       {
-        err.Message
+        Message = err.Message,
+        Success = false
       });
     }
   }
@@ -122,6 +131,8 @@ public class LoginRequest
 
 public class RegisterRequest
 {
+  public string? HoTen { get; set; }
+  public string? SoDienThoai { get; set; }
   public string? Email { get; set; }
   public string? MatKhau { get; set; }
 }
