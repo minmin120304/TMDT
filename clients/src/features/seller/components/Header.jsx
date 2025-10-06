@@ -1,34 +1,10 @@
-import { Popover } from "antd"
-
-import React from 'react';
-import { Avatar, Dropdown, Menu } from 'antd';
-import {
-  ShoppingOutlined,
-  SettingOutlined,
-  GlobalOutlined,
-  LogoutOutlined,
-  RightOutlined
-} from '@ant-design/icons';
+import { LogoutOutlined, SettingOutlined, ShoppingOutlined } from '@ant-design/icons';
+import { Avatar, Popover } from "antd";
 import { Link } from "react-router-dom";
+
 import { routePaths } from "../routes";
 
 function AccountPopOver() {
-  const menuItems = [
-    { key: 'support-shop', icon: <ShoppingOutlined className="text-base" />, label: 'Hỗ Sơ Shop', },
-    { key: 'settings', icon: <SettingOutlined className="text-base" />, label: 'Thiết Lập Shop', },
-    {
-      key: 'language', icon: <GlobalOutlined className="text-base" />,
-      label: (
-        <div className="flex items-center justify-between w-full">
-          <span>Tiếng Việt (Vietnamese)</span>
-          <RightOutlined className="text-xs text-gray-400" />
-        </div>
-      ),
-    },
-    { type: 'divider', },
-    { key: 'logout', icon: <LogoutOutlined className="text-base" />, label: 'Đăng xuất', },
-  ];
-
   return (
     <div className="flex gap-1 flex-col justify-center w-60">
       <div className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity">
@@ -51,7 +27,6 @@ function AccountPopOver() {
         <span className="text-sm">Đăng xuất</span>
       </div>
     </div>
-
   )
 }
 
