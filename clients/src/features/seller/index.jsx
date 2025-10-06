@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import AuthLayout from "./layouts/AuthLayout"
 import MainLayout from "./layouts/MainLayout"
-import AllProduct from "./pages/AllProduct"
+import ProductDashBoard from "./pages/ProductDashBoard"
 import Dashboard from "./pages/Dashboard"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
@@ -24,7 +24,7 @@ function Seller() {
         <Route element={<MainLayout />}>
           <Route path={ROUTE_KEYS.MANAGEMENT}>
             <Route index element={<Dashboard />} />
-            <Route path={ROUTE_KEYS.PRODUCTS} element={<AllProduct />} />
+            <Route path={ROUTE_KEYS.PRODUCTS} element={<ProductDashBoard />} />
           </Route>
 
           {/* Default error page */}
