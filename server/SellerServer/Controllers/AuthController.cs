@@ -13,36 +13,27 @@ using Utilities;
 namespace SellerServer.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthController(IConfiguration config, AppDbContext dbContext) : ControllerBase
 {
   private readonly IConfiguration _config = config;
   private readonly AppDbContext dbContext = dbContext;
 
-  async Task ValidateRegisterRequest(RegisterRequest request)
-  {
-    if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.MatKhau))
-    {
-      throw new Exception("Invalid input");
-    }
-    if (await dbContext.NguoiDung.FirstOrDefaultAsync(i => i.Email == request.Email) != null)
-    {
-      throw new Exception("Email is existed.");
-    }
-  }
   [HttpPost("register")]
   public async Task<IActionResult> Register([FromBody] RegisterRequest request)
   {
     try
     {
-      await ValidateRegisterRequest(request);
+      await RegisterRequest.ValidateRegisterRequest(dbContext, request);
 
       var (hash, salt) = AuthUtilities.GeneratePasswordHash(request.MatKhau!);
       NguoiDung nguoiDung = new()
       {
+        HoTen = request.HoTen,
+        SoDienThoai = request.SoDienThoai,
         Email = request.Email,
         MatKhauBam = hash,
-        Salt = salt
+        Salt = salt,
       };
 
       await dbContext.NguoiDung.AddAsync(nguoiDung);
@@ -70,17 +61,7 @@ public class AuthController(IConfiguration config, AppDbContext dbContext) : Con
   {
     try
     {
-      NguoiDung? nguoiDung = await dbContext.NguoiDung.FirstOrDefaultAsync(i => i.Email == request.Email);
-
-      if (nguoiDung == null)
-      {
-        throw new Exception("User not found!");
-      }
-
-      if (!AuthUtilities.VerifyPassword(request.MatKhau, nguoiDung.MatKhauBam!, nguoiDung.Salt!))
-      {
-        throw new Exception("Invalid request");
-      }
+      await LoginRequest.ValidateLoginRequest(dbContext, request);
 
       var jwtSettings = _config.GetSection("Jwt");
       var claims = new[]
@@ -125,12 +106,40 @@ public class AuthController(IConfiguration config, AppDbContext dbContext) : Con
 
 public class LoginRequest
 {
+  public static async Task ValidateLoginRequest(AppDbContext dbContext, LoginRequest request)
+  {
+    NguoiDung? nguoiDung = await dbContext.NguoiDung.FirstOrDefaultAsync(i => i.Email == request.Email);
+
+    if (nguoiDung == null)
+    {
+      throw new Exception("User not found!");
+    }
+
+    if (!AuthUtilities.VerifyPassword(request.MatKhau, nguoiDung.MatKhauBam!, nguoiDung.Salt!))
+    {
+      throw new Exception("Invalid request");
+    }
+  }
+
   public required string Email { get; set; }
   public required string MatKhau { get; set; }
 }
 
 public class RegisterRequest
 {
+  public static async Task ValidateRegisterRequest(AppDbContext dbContext, RegisterRequest request)
+  {
+    if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.MatKhau))
+    {
+      throw new Exception("Invalid input");
+    }
+
+    if (await dbContext.NguoiDung.FirstOrDefaultAsync(i => i.Email == request.Email) != null)
+    {
+      throw new Exception("Email is existed.");
+    }
+  }
+
   public string? HoTen { get; set; }
   public string? SoDienThoai { get; set; }
   public string? Email { get; set; }
