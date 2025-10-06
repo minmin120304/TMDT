@@ -1,49 +1,71 @@
-import { faBox, faChartLine, faFileInvoice, faSplotch, faSquarePollVertical, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faBox, faChartLine, faFileInvoice, faPeopleGroup, faSplotch, faSquarePollVertical, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu } from 'antd';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
-  };
   const items = useMemo(() => [
-
-    { key: 'a', icon: <FontAwesomeIcon icon={faBox} />, label: 'Quản lý sản phẩm', },
     {
-      key: 'b', icon: <FontAwesomeIcon icon={faFileInvoice} />, label: 'Quản lý đơn hàng',
+      key: 'a', icon: <FontAwesomeIcon icon={faBox} />, label: 'Quản Lý Sản Phẩm',
       children: [
-        { key: 'b1', label: "Tất cả" },
-        { key: 'b2', label: "Bàn giao đơn hàng" },
-        { key: 'b3', label: "Đơn Hủy/Hoàn tiền" },
-        { key: 'b4', label: "Vận chuyển" },
+        { key: 'a1', label: "Tất Cả Sản Phẩm" },
+        { key: 'a2', label: "Thêm Sản Phẩm" },
       ]
     },
     {
-      key: 'c', icon: <FontAwesomeIcon icon={faChartLine} />, label: 'Quản lý Marketing',
+      key: 'b', icon: <FontAwesomeIcon icon={faFileInvoice} />, label: 'Quản Lý đơn hàng',
       children: [
-        { key: "c1", label: "Tất cả" },
-        { key: "c2", label: "Khuyến mãi của Shop" },
-        { key: "c3", label: "Flash Sale của Shop" },
-        { key: "c4", label: "Mã giảm giá của Shop" },
-        { key: "c5", label: "Chương trình Shopee" },
+        { key: 'b1', label: "Tất Cả" },
+        { key: 'b2', label: "Bàn Giao Đơn Hàng" },
+        { key: 'b3', label: "Đơn Hủy/Hoàn Tiền" },
+        { key: 'b4', label: "Vận Chuyển" },
       ]
     },
-    { key: 'd', icon: <FontAwesomeIcon icon={faWallet} />, label: 'Quản lý tài chính' },
-    { key: 'e', icon: <FontAwesomeIcon icon={faSquarePollVertical} />, label: 'Phân tích dữ liệu' },
-    { key: 'f', icon: <FontAwesomeIcon icon={faSplotch} />, label: 'Quản lý cửa hàng' },
-    { key: 'f', icon: <FontAwesomeIcon icon={faSplotch} />, label: 'Chăm sóc khách hàng' },
+    {
+      key: 'c', icon: <FontAwesomeIcon icon={faChartLine} />, label: 'Quản Lý Marketing',
+      children: [
+        { key: "c1", label: "Tất Cả" },
+        { key: "c2", label: "Khuyến Mãi Của Shop" },
+        { key: "c3", label: "Flash Sale Của Shop" },
+        { key: "c4", label: "Mã Giảm Giá Của Shop" },
+        { key: "c5", label: "Chương Trình Shopee" },
+      ]
+    },
+    {
+      key: 'd', icon: <FontAwesomeIcon icon={faWallet} />, label: 'Quản Lý tài chính',
+      children: [
+        { key: "d1", label: "Doanh thu" },
+        { key: "d2", label: "Tài Khoản Ngân Hàng" },
+        { key: "d3", label: "Số Dư Tài Khoản" },
+      ]
+    },
+    {
+      key: 'e', icon: <FontAwesomeIcon icon={faSquarePollVertical} />, label: 'Phân tích dữ liệu',
+      children: [
+        { key: "e1", label: "Phân Tích Bán Hàng" },
+        { key: "e2", label: "Hiệu Quả Hoạt Động" },
+      ]
+    },
+    {
+      key: 'f', icon: <FontAwesomeIcon icon={faSplotch} />, label: 'Quản Lý cửa hàng',
+      children: [
+        { key: "f1", label: "Hồ Sơ Shop" },
+        { key: "f2", label: "Trang Trí Shop" },
+      ]
+    },
+    {
+      key: 'g', icon: <FontAwesomeIcon icon={faPeopleGroup} />, label: 'Chăm sóc khách hàng',
+      children: [
+        { key: "g1", label: "Quản Lý Chat" },
+        { key: "g2", label: "Quản Lý Đánh Giá" },
+        { key: "g3", label: "Quản Lý Khiếu Nại" },
+      ]
+    },
   ], [])
 
   return (
-    <>
-      {/* <Button type="primary" onClick={toggleCollapsed} style={{ marginBottom: 16 }}>
-        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </Button> */}
-      <Menu mode="inline" theme="dark" inlineCollapsed={false} items={items} />
-    </>
+    <Menu className='h-full overflow-y-scroll' mode="inline" theme="dark" inlineCollapsed={false} items={items} />
   );
 };
 export default Sidebar;
