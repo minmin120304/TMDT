@@ -1,12 +1,18 @@
 import { Outlet } from "react-router-dom"
+
+import Header from "../components/Header"
 import Sidebar from "../components/Sidebar"
 
 function MainLayout() {
   return (
-    <div className="w-screen h-screen overflow-hidden grid grid-cols-[1fr_5fr]">
-      <Sidebar />
-      <div className="h-full overflow-auto">
-        <Outlet />
+    <div className="w-screen h-screen overflow-hidden grid grid-rows-[max-content_1fr]">
+      <Header />
+      <div className="overflow-hidden grid grid-cols-[max-content_1fr]">
+        <Sidebar />
+
+        <div className="h-full overflow-auto bg-gray-50">
+          <Outlet />
+        </div>
       </div>
     </div>
   )

@@ -1,16 +1,30 @@
-import { faBox, faChartLine, faFileInvoice, faPeopleGroup, faSplotch, faSquarePollVertical, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faBox, faChartLine, faFileInvoice, faHome, faPeopleGroup, faSplotch, faSquarePollVertical, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Menu } from 'antd';
+import { ConfigProvider, Menu } from 'antd';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import { routePaths } from '../routes';
+
+const theme = {
+  components: {
+    Menu: {
+      /* here is your component tokens */
+      darkItemSelectedBg: "#000c17",
+
+    },
+  },
+}
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const items = useMemo(() => [
+    { key: routePaths.management.root, icon: <FontAwesomeIcon icon={faHome} />, label: "Trang Chủ" },
     {
-      key: 'a', icon: <FontAwesomeIcon icon={faBox} />, label: 'Quản Lý Sản Phẩm',
+      key: routePaths.management.product.root, icon: <FontAwesomeIcon icon={faBox} />, label: 'Quản Lý Sản Phẩm',
       children: [
-        { key: 'a1', label: "Tất Cả Sản Phẩm" },
-        { key: 'a2', label: "Thêm Sản Phẩm" },
+        { key: routePaths.management.product.root, label: "Tất Cả Sản Phẩm" },
+        { key: routePaths.management.product.insert, label: "Thêm Sản Phẩm" },
       ]
     },
     {
@@ -63,9 +77,14 @@ const Sidebar = () => {
       ]
     },
   ], [])
-
+  function onClick(e) {
+    console.log(e)
+    navigate(e.key)
+  }
   return (
-    <Menu className='h-full overflow-y-scroll' mode="inline" theme="dark" inlineCollapsed={false} items={items} />
+    <ConfigProvider theme={theme}>
+      <Menu className='h-full overflow-y-scroll' mode="inline" theme="dark" inlineCollapsed={false} items={items} onClick={onClick} />
+    </ConfigProvider>
   );
 };
 export default Sidebar;
