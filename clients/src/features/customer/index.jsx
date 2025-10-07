@@ -9,16 +9,14 @@ function Customer() {
   }, [])
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={
-          <div className="min-h-screen bg-gray-50">
-            <LazadaHeader />
-            <LazadaHomepage />
-          </div>
-        } />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={
+        <div className="min-h-screen bg-gray-50">
+          <LazadaHeader />
+          <LazadaHomepage />
+        </div>
+      } />
+    </Routes>
   )
 }
 export default Customer

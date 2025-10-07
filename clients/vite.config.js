@@ -14,6 +14,10 @@ export default defineConfig(({ mode }) => {
     server: {
       port: Number(env.VITE_PORT)
     },
+    base: "./",
+    build: {
+      outDir: `dist-${mode}`
+    },
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "src"),

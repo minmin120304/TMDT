@@ -5,6 +5,7 @@ node_modules
 .vite
 bin/
 obj/
+dist*
 Migrations/
 appsettings.json
 appsettings.Development.json

@@ -18,28 +18,26 @@ function Seller() {
   }, [])
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={ROUTE_KEYS.ACCOUNT} element={<AuthLayout />} >
-          <Route path={ROUTE_KEYS.REGISTER} element={<Register />} />
-          <Route path={ROUTE_KEYS.LOGIN} element={<Login />} />
-        </Route>
+    <Routes>
+      <Route path={ROUTE_KEYS.ACCOUNT} element={<AuthLayout />} >
+        <Route path={ROUTE_KEYS.REGISTER} element={<Register />} />
+        <Route path={ROUTE_KEYS.LOGIN} element={<Login />} />
+      </Route>
 
-        <Route element={<MainLayout />}>
-          <Route path={ROUTE_KEYS.MANAGEMENT}>
-            <Route index element={<Dashboard />} />
+      <Route element={<MainLayout />}>
+        <Route path={ROUTE_KEYS.MANAGEMENT}>
+          <Route index element={<Dashboard />} />
 
-            <Route path={ROUTE_KEYS.PRODUCTS}  >
-              <Route index element={<ProductDashBoard />} />
-              <Route path={ROUTE_KEYS.INSERT} element={<AddProduct />} />
-            </Route>
+          <Route path={ROUTE_KEYS.PRODUCTS}  >
+            <Route index element={<ProductDashBoard />} />
+            <Route path={ROUTE_KEYS.INSERT} element={<AddProduct />} />
           </Route>
-
-          {/* Default error page */}
-          <Route path={ROUTE_KEYS.NOT_FOUND} element={"ddd"} />
         </Route>
-      </Routes>
-    </BrowserRouter>
+
+        {/* Default error page */}
+        <Route path={ROUTE_KEYS.NOT_FOUND} element={"ddd"} />
+      </Route>
+    </Routes>
   )
 }
 export default Seller
