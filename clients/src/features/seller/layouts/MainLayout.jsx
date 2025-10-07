@@ -10,7 +10,7 @@ function MainLayout() {
       <div className="overflow-hidden grid grid-cols-[max-content_1fr]">
         <Sidebar />
 
-        <div className="h-full overflow-auto bg-gray-50">
+        <div className="h-full overflow-y-scroll overflow-x-auto bg-gray-50">
           <Outlet />
         </div>
       </div>

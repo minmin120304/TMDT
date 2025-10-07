@@ -5,7 +5,7 @@ import EmptyList from '@seller/components/EmptyList';
 
 function AllActiveProduct() {
   const columns = [
-    { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name', width: '30%' },
+    { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name', width: '30%', sorter: true },
     { title: 'Doanh số', dataIndex: 'sales', key: 'sales', sorter: true },
     { title: 'Giá', dataIndex: 'price', key: 'price', sorter: true },
     { title: 'Kho hàng', dataIndex: 'stock', key: 'stock', sorter: true },

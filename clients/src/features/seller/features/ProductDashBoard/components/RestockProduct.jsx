@@ -3,9 +3,9 @@ import { Button, Dropdown, Form, Input, Select, Table } from 'antd';
 
 import EmptyList from '@seller/components/EmptyList';
 
-function AllProduct() {
+function RestockProduct() {
   const columns = [
-    { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name', width: '30%' },
+    { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name', width: '30%', sorter: true },
     { title: 'Doanh số', dataIndex: 'sales', key: 'sales', sorter: true },
     { title: 'Giá', dataIndex: 'price', key: 'price', sorter: true },
     { title: 'Kho hàng', dataIndex: 'stock', key: 'stock', sorter: true },
@@ -13,7 +13,15 @@ function AllProduct() {
   ];
 
   return (
-    <div className='bg-white p-5 flex flex-col gap-5'>
+    <div className='flex flex-col gap-5'>
+      <div className='text-sm flex gap-5 items-center'>
+        <p>Bộ lọc nhanh</p>
+        <Select className='w-40' defaultValue="0" options={[
+          { value: "0", label: "Còn hàng" },
+          { value: "1", label: "Hết hàng" }
+        ]} />
+      </div>
+
       <Form layout='inline'>
         <Form.Item className='w-100' name="name">
           <Input prefix={<SearchOutlined className="text-gray-400" />} />
@@ -57,4 +65,4 @@ function AllProduct() {
   )
 }
 
-export default AllProduct
+export default RestockProduct
