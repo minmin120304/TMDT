@@ -7,7 +7,9 @@ export const ROUTE_KEYS = {
   INSERT: "them",
   UPDATE: "chinh-sua",
   DELETE: "xoa",
-  NOT_FOUND: "*"
+  ORDERS: "don-hang",
+  RETURN: "tra-hang",
+  NOT_FOUND: "*",
 };
 
 export const routePaths = {
@@ -21,6 +23,10 @@ export const routePaths = {
     product: {
       root: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.PRODUCTS}`,
       insert: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.PRODUCTS}/${ROUTE_KEYS.INSERT}`
+    },
+    orders: {
+      root: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.ORDERS}`,
+      return: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.ORDERS}/${ROUTE_KEYS.RETURN}`
     }
   }
 };

@@ -1,5 +1,4 @@
-import { useEffect } from "react"
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
 
 import AuthLayout from "./layouts/AuthLayout"
 import MainLayout from "./layouts/MainLayout"
@@ -7,15 +6,14 @@ import MainLayout from "./layouts/MainLayout"
 import AddProduct from "./features/AddProduct"
 import Dashboard from "./features/Dashboard"
 import Login from "./features/Login"
-import ProductDashBoard from "./features/ProductDashBoard"
+import ProductDashBoard from "./features/ProductDashboard"
 import Register from "./features/Register"
+import OrderDashboard from "./features/OrderDashboard"
+import ReturnOrder from "./features/ReturnOrder"
 
 import { ROUTE_KEYS } from "./routes"
 
 function Seller() {
-  useEffect(function () {
-    document.title = import.meta.env.VITE_MODE
-  }, [])
 
   return (
     <Routes>
@@ -31,6 +29,11 @@ function Seller() {
           <Route path={ROUTE_KEYS.PRODUCTS}  >
             <Route index element={<ProductDashBoard />} />
             <Route path={ROUTE_KEYS.INSERT} element={<AddProduct />} />
+          </Route>
+
+          <Route path={ROUTE_KEYS.ORDERS} >
+            <Route index element={<OrderDashboard />} />
+            <Route path={ROUTE_KEYS.RETURN} element={<ReturnOrder />} />
           </Route>
         </Route>
 

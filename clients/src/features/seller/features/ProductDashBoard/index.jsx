@@ -1,10 +1,11 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Tabs } from 'antd';
-
-import ProductListLayout from './components/ProductListLayout';
 import { Link } from 'react-router-dom';
-import { routePaths } from '../../routes';
+
+import { routePaths } from '$/routes';
+import ProductListLayout from './components/ProductListLayout';
+
 
 function ProductDashBoard() {
   const topTabs = [
@@ -20,16 +21,6 @@ function ProductDashBoard() {
         </div>
       )
     },
-    // {
-    //   key: 'violation', label: <p className='px-3'>Vi phạm</p>, children: (
-    //     <div className='bg-white px-5'>
-    //       <Tabs items={[
-    //         { key: 'all', label: <p className='px-3'>Đã tạm khóa</p>, children: <AllActiveProduct /> },
-    //         { key: 'need-produce', label: <p className='px-3'>Bị ẩn</p>, children: <AllActiveProduct /> },
-    //       ]} />
-    //     </div>
-    //   )
-    // },
     { key: 'not-logged', label: <p className='px-3'>Đang ẩn</p>, children: <ProductListLayout /> }
   ];
 

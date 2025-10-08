@@ -53,7 +53,7 @@ function AddProduct() {
 
           {/* Product Description */}
           <Form.Item label="Mô tả sản phẩm">
-            <TextArea rows={10} maxLength={3000} placeholder="Nhập mô tả sản phẩm..." />
+            <TextArea rows={10} maxLength={3000} style={{ resize: 'none' }} placeholder="Nhập mô tả sản phẩm..." />
             <div className="text-right text-gray-400 mt-1">{3}/3000</div>
           </Form.Item>
 
@@ -66,12 +66,12 @@ function AddProduct() {
 
           {/* Bulk Discount */}
           <Form.Item label="Mua nhiều giảm giá">
-            <Form.List>
+            <Form.List name="discounts">
               {(fields, { add, remove }) => (
                 <div className='flex flex-col'>
                   {fields.map(({ key, name, ...restField }) => (
-                    <div key={key} className='grid grid-cols-[1fr_1fr_1fr_auto] gap-2 w-full'>
-                      <Form.Item style={{ width: "100%" }} {...restField} name={[name, 'from']} rules={[{ required: true, message: 'Từ sản phẩm' }]}>
+                    <div {...restField} key={key} className='grid grid-cols-[1fr_1fr_1fr_auto] gap-2 w-full'>
+                      <Form.Item style={{ width: "100%" }} name={[name, 'from']} rules={[{ required: true, message: 'Từ sản phẩm' }]}>
                         <Input type='number' placeholder="Từ sản phẩm" />
                       </Form.Item>
                       <Form.Item style={{ width: "100%" }} {...restField} name={[name, 'to']} rules={[{ required: true, message: 'Đến sản phẩm' }]}>

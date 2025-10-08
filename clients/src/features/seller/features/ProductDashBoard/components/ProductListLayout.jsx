@@ -1,7 +1,7 @@
 import { DownOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Select, Table } from 'antd';
 
-import EmptyList from '@seller/components/EmptyList';
+import EmptyList from '$/components/EmptyList';
 
 function ProductListLayout({ dataSource = [] }) {
   const columns = [

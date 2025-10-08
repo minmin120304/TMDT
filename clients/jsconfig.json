@@ -5,15 +5,11 @@
       "@/*": [
         "src/*"
       ],
-      "@administrator/*": [
-        "src/administrator*"
-      ],
-      "@customer/*": [
-        "src/customer*"
-      ],
-      "@seller/*": [
-        "src/features/seller/*"
-      ],
+      "$/*": [
+        "src/features/seller/*",
+        "src/features/administrator/*",
+        "src/features/customer/*",
+      ]
     }
   }
 }
