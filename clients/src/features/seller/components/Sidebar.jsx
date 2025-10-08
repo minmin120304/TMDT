@@ -26,9 +26,7 @@ const items = [
     key: ROUTE_KEYS.ORDERS, icon: <FontAwesomeIcon icon={faFileInvoice} />, label: 'Quản Lý đơn hàng',
     children: [
       { key: routePaths.management.orders.root, label: "Tất Cả" },
-      // { key: 'b2', label: "Bàn Giao Đơn Hàng" },
       { key: routePaths.management.orders.return, label: "Đơn Hủy/Hoàn Tiền" },
-      // { key: 'b4', label: "Vận Chuyển" },
     ]
   },
   {

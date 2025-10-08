@@ -1,11 +1,9 @@
-
-import { CalendarOutlined, FileTextOutlined, MenuOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Input, Radio, Select, Space, Table, Tabs } from 'antd';
+import { CalendarOutlined, FileTextOutlined } from '@ant-design/icons';
+import { Button, DatePicker, Divider, Form, Input, Radio, Select, Table, Tabs } from 'antd';
 import { useState } from 'react';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
-
 
 function ReturnOrder() {
   const [activeMainTab, setActiveMainTab] = useState('all');
@@ -34,166 +32,114 @@ function ReturnOrder() {
   return (
     <div className="m-5">
       {/* Main Tabs */}
-      <Tabs activeKey={activeMainTab} onChange={setActiveMainTab} className="flex-1">
-        <TabPane tab="Tất cả" key="all" />
-        <TabPane tab="Đơn Trả hàng Hoàn tiền" key="return" />
-        <TabPane tab="Đơn Hủy" key="cancel" />
-        <TabPane tab="Đơn Giao hàng không thành công" key="failed" />
-      </Tabs>
-
+      <Tabs activeKey={activeMainTab} onChange={setActiveMainTab} className="flex-1"
+        items={[
+          { key: 'all', label: 'Tất cả', children: null },
+          { key: 'return', label: 'Đơn Trả hàng Hoàn tiền', children: null },
+          { key: 'cancel', label: 'Đơn Hủy', children: null },
+          { key: 'failed', label: 'Đơn Giao hàng không thành công', children: null },
+        ]} />
 
       {/* Sub Tabs */}
       <div className="bg-white px-5">
-        <Tabs activeKey={activeSubTab} onChange={setActiveSubTab}>
-          <TabPane tab="Tất cả" key="all" />
-          {/* <TabPane tab="Shopee đang xem xét" key="reviewing" /> */}
-          <TabPane tab="Đang trả hàng cho Người bán" key="returning" />
-          <TabPane tab="Đã hoàn tiền cho Người mua" key="refunded" />
-          {/* <TabPane tab="Đã khiếu nại đến Shopee" key="complained" /> */}
-          <TabPane tab="Yêu cầu bị hủy/không hợp lệ" key="invalid" />
-          <TabPane tab="Đã gửi yêu cầu cần kiểu nai" key="pending" />
-        </Tabs>
+        <Tabs activeKey={activeSubTab} onChange={setActiveSubTab} items={[
+          { key: 'all', label: 'Tất cả', children: null },
+          // { key: 'reviewing', label: 'Shopee đang xem xét', children: null },
+          { key: 'returning', label: 'Đang trả hàng cho Người bán', children: null },
+          { key: 'refunded', label: 'Đã hoàn tiền cho Người mua', children: null },
+          // { key: 'complained', label: 'Đã khiếu nại đến Shopee', children: null },
+          { key: 'invalid', label: 'Yêu cầu bị hủy/không hợp lệ', children: null },
+          { key: 'pending', label: 'Đã gửi yêu cầu cần kiểu nai', children: null },
+        ]} />
       </div>
 
-      {/* Priority Filter */}
-      <div className="bg-white px-5 py-3">
-        <div className="flex items-center gap-3 text-sm">
-          <span className="text-gray-700">Ưu tiên</span>
-          <Radio.Group value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)}>
-            <Radio.Button value="all" >Tất cả</Radio.Button>
-            <Radio.Button value="1day">Hết hạn sau 1 ngày</Radio.Button>
-            <Radio.Button value="2days">Hết hạn sau 2 ngày</Radio.Button>
-          </Radio.Group>
-        </div>
-      </div>
+      <div className='bg-white px-5 flex flex-col'>
+        {/* Priority Filter */}
+        <Form layout="horizontal" className='pt-5'>
+          <Form.Item label="Ưu tiên" name="priority">
+            <Radio.Group optionType='button' options={[
+              { label: 'Tất cả', value: 'all' },
+              { label: 'Hết hạn sau 1 ngày', value: '1day' },
+              { label: 'Hết hạn sau 2 ngày', value: '2days' },
+            ]} />
+          </Form.Item>
 
-      {/* Action Tags */}
-      <div className="bg-white px-5 py-3">
-        <div className="flex items-center gap-3 text-sm">
-          <span className="text-gray-700">HÀNH ĐỘNG QUAN TRỌNG</span>
-          <button className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200">Thương lượng với Người mua</button>
-          <button className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200">Cần cung cấp bằng chứng</button>
-          <button className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200">Giữ lại kiện hàng</button>
-          <button className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200">Kiểm tra hàng hoàn</button>
-          <button className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200">Phản hồi quyết định hoàn tiền của Shopee</button>
-        </div>
-      </div>
+          {/* Action Tags */}
+          <Form.Item label="HÀNH ĐỘNG QUAN TRỌNG" name="actionTags"   >
+            <Radio.Group optionType='button' options={[
+              { label: 'Thương lượng với Người mua', value: 'all' },
+              { label: 'Cần cung cấp bằng chứng', value: 'pending' },
+              { label: 'Giữ lại kiện hàng', value: 'shipping' },
+              { label: 'Kiểm tra hàng hoàn', value: 'completed' },
+              { label: 'Phản hồi quyết định hoàn tiền của Shopee', value: 'canceled' },
+            ]} />
+          </Form.Item>
+        </Form>
 
-      {/* Advanced Filters */}
-      <div className="bg-white px-5 py-3">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-          {/* Left Column */}
-          <div className="space-y-4">
-            <div className="flex gap-3">
-              <label className="w-48 text-gray-700 flex items-center gap-1 shrink-0">
-                Tìm yêu cầu
-              </label>
+        <Divider />
+
+        {/* Advanced Filters */}
+        <Form layout="vertical" className='pt-5' onFinish={(values) => console.log(values)}>
+          <div className="grid grid-cols-2 gap-x-5">
+            {/* Left Column */}
+            <Form.Item label="Tìm yêu cầu" name="searchRequest">
               <Input placeholder="Điền Mã yêu cầu trả hàng/ Mã đơn hàng/ Mã vận đơn hàng hoàn/ Tài khoản Người mua" className="flex-1" />
-            </div>
+            </Form.Item>
 
-            <div className="flex gap-3">
-              <label className="w-48 text-gray-700 flex items-center gap-1 shrink-0">
-                Trạng thái
-                <QuestionCircleOutlined className="text-gray-400 text-xs" />
-              </label>
-              <Select className="flex-1" placeholder="Vui lòng chọn">
-                <Option value="">Vui lòng chọn</Option>
-              </Select>
-            </div>
+            <Form.Item label="Toàn bộ thao tác" name="searchProduct" >
+              <Select placeholder="Vui lòng chọn" />
+            </Form.Item>
 
-            <div className="flex gap-3">
-              <label className="w-48 text-gray-700 flex items-center gap-1 shrink-0">
-                Vận chuyển chiều hoàn hàng
-                <QuestionCircleOutlined className="text-gray-400 text-xs" />
-              </label>
-              <Select className="flex-1" placeholder="Vui lòng chọn">
-                <Option value="">Vui lòng chọn</Option>
-              </Select>
-            </div>
+            <Form.Item label="Trạng thái" name="status">
+              <Select placeholder="Vui lòng chọn" />
+            </Form.Item>
+            <Form.Item label="Vận chuyển chiều giao hàng" name="deliveryShipping">
+              <Select placeholder="Vui lòng chọn" />
+            </Form.Item>
 
-            <div className="flex gap-3">
-              <label className="w-48 text-gray-700 shrink-0">
-                Phương án cho Người mua
-              </label>
-              <Select className="flex-1" placeholder="Vui lòng chọn">
-                <Option value="">Vui lòng chọn</Option>
-              </Select>
-            </div>
+            <Form.Item label="Vận chuyển chiều hoàn hàng" name="returnShipping">
+              <Select placeholder="Vui lòng chọn" />
+            </Form.Item>
 
-            <div className="flex gap-3">
-              <label className="w-48 text-gray-700 flex items-center gap-1 shrink-0">
-                Dự kiến hoàn tiền
-                <QuestionCircleOutlined className="text-gray-400 text-xs" />
-              </label>
-              <div className="flex-1 flex items-center gap-2">
-                <Input placeholder="Số tiền hoàn tối thiểu" />
-                <span className="text-gray-400">-</span>
-                <Input placeholder="Số tiền hoàn tối đa" />
+            <Form.Item label="Lý do" name="reason">
+              <Select placeholder="Vui lòng chọn" />
+            </Form.Item>
+
+            <Form.Item label="Phương án cho Người mua" name="buyerOption">
+              <Select placeholder="Vui lòng chọn" />
+            </Form.Item>
+
+            <Form.Item label="Khiếu nại được cấp bù" name="compensated">
+              <Select placeholder="Vui lòng chọn" />
+            </Form.Item>
+
+            <Form.Item label="Dự kiến hoàn tiền">
+              <div className='grid grid-cols-2 gap-3 items-center w-full'>
+                <Form.Item name="minAmount">
+                  <Input type='number' placeholder="Số tiền hoàn tối thiểu" />
+                </Form.Item>
+                <Form.Item name="maxAmount">
+                  <Input type='number' placeholder="Số tiền hoàn tối đa" />
+                </Form.Item>
               </div>
-            </div>
+            </Form.Item>
+
+            <Form.Item label="Ngày yêu cầu" name="requestDate">
+              <DatePicker.RangePicker className='w-full' suffixIcon={<CalendarOutlined />} />
+            </Form.Item>
           </div>
 
-          {/* Right Column */}
-          <div className="space-y-4">
-            <div className="flex gap-3">
-              <label className="w-48 text-gray-700 flex items-center gap-1 shrink-0">
-                Toàn bộ thao tác
-                <QuestionCircleOutlined className="text-gray-400 text-xs" />
-              </label>
-              <Select className="flex-1" placeholder="Vui lòng chọn">
-                <Option value="">Vui lòng chọn</Option>
-              </Select>
+          {/* Action Buttons */}
+          <Form.Item>
+            <div className='flex gap-3 w-full'>
+              <Button type="primary" color="blue" htmlType='submit'>Tìm kiếm</Button>
+              <Button>Đặt lại</Button>
             </div>
+          </Form.Item>
+        </Form>
 
-            <div className="flex gap-3">
-              <label className="w-48 text-gray-700 flex items-center gap-1 shrink-0">
-                Vận chuyển chiều giao hàng
-                <QuestionCircleOutlined className="text-gray-400 text-xs" />
-              </label>
-              <Select className="flex-1" placeholder="Vui lòng chọn">
-                <Option value="">Vui lòng chọn</Option>
-              </Select>
-            </div>
-
-            <div className="flex gap-3">
-              <label className="w-48 text-gray-700 flex items-center gap-1 shrink-0">
-                Lý do
-                <QuestionCircleOutlined className="text-gray-400 text-xs" />
-              </label>
-              <Select className="flex-1" placeholder="Vui lòng chọn">
-                <Option value="">Vui lòng chọn</Option>
-              </Select>
-            </div>
-
-            <div className="flex gap-3">
-              <label className="w-48 text-gray-700 flex items-center gap-1 shrink-0">
-                Khiếu nại được cấp bù
-                <QuestionCircleOutlined className="text-gray-400 text-xs" />
-              </label>
-              <Select className="flex-1" placeholder="Vui lòng chọn">
-                <Option value="">Vui lòng chọn</Option>
-              </Select>
-            </div>
-
-            <div className="flex gap-3">
-              <label className="w-48 text-gray-700 shrink-0">
-                Ngày yêu cầu
-              </label>
-              <Input placeholder="Vui lòng chọn thời gian yêu cầu Trả hàng/Hoàn tiền" suffix={<CalendarOutlined className="text-gray-400" />} className="flex-1" />
-            </div>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex items-center gap-3 mt-6">
-          <Button type="primary" color="blue" className="px-6">Tìm kiếm</Button>
-          <Button className="px-6">Đặt lại</Button>
-        </div>
-      </div>
-
-      {/* Results Section */}
-      <div className="bg-white ">
-        <Table className='p-5' columns={columns} pagination={false} locale={{ emptyText: emptyDescription }} />
+        {/* Results Section */}
+        <Table className='pb-5' columns={columns} pagination={false} locale={{ emptyText: emptyDescription }} />
       </div>
     </div >
   );
