@@ -2,9 +2,6 @@ import { CalendarOutlined, FileTextOutlined } from '@ant-design/icons';
 import { Button, DatePicker, Divider, Form, Input, Radio, Select, Table, Tabs } from 'antd';
 import { useState } from 'react';
 
-const { TabPane } = Tabs;
-const { Option } = Select;
-
 function ReturnOrder() {
   const [activeMainTab, setActiveMainTab] = useState('all');
   const [activeSubTab, setActiveSubTab] = useState('all');

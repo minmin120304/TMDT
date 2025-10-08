@@ -3,14 +3,15 @@ import { Route, Routes } from "react-router-dom"
 import AuthLayout from "./layouts/AuthLayout"
 import MainLayout from "./layouts/MainLayout"
 
-import AddProduct from "./features/AddProduct"
+import Login from "./features/Auth/Login"
+import Register from "./features/Auth/Register"
 import Dashboard from "./features/Dashboard"
-import Login from "./features/Login"
-import ProductDashBoard from "./features/ProductDashboard"
-import Register from "./features/Register"
-import OrderDashboard from "./features/OrderDashboard"
-import ReturnOrder from "./features/ReturnOrder"
-
+import DiscountDashboard from "./features/Marketing/DiscountDashboard"
+import MarketingDashboard from "./features/Marketing/MarketingDashboard"
+import OrderDashboard from "./features/Order/OrderDashboard"
+import ReturnOrder from "./features/Order/ReturnOrder"
+import AddProduct from "./features/Product/AddProduct"
+import ProductDashBoard from "./features/Product/ProductDashboard"
 import { ROUTE_KEYS } from "./routes"
 
 function Seller() {
@@ -34,6 +35,11 @@ function Seller() {
           <Route path={ROUTE_KEYS.ORDERS} >
             <Route index element={<OrderDashboard />} />
             <Route path={ROUTE_KEYS.RETURN} element={<ReturnOrder />} />
+          </Route>
+
+          <Route path={ROUTE_KEYS.MARKETING} >
+            <Route index element={<MarketingDashboard />} />
+            <Route path={ROUTE_KEYS.DISCOUNTS} element={<DiscountDashboard />} />
           </Route>
         </Route>
 

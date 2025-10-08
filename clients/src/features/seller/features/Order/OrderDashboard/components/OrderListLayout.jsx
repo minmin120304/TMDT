@@ -11,7 +11,6 @@ const columns = [
   { title: 'Thao tác', dataIndex: 'action', key: 'action', },
 ];
 function OrderListLayout({ dataSource = [] }) {
-
   return (
     <div className='flex flex-col gap-5'>
 

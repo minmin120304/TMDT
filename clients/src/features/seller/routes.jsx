@@ -9,6 +9,12 @@ export const ROUTE_KEYS = {
   DELETE: "xoa",
   ORDERS: "don-hang",
   RETURN: "tra-hang",
+  MARKETING: "marketing",
+  DISCOUNTS: "khuyen-mai",
+  FINANCE: "tai-chinh",
+  ANALYTICS: "phan-tich",
+  STORE: "cua-hang",
+  DASHBOARD: "dashboard",
   NOT_FOUND: "*",
 };
 
@@ -27,6 +33,11 @@ export const routePaths = {
     orders: {
       root: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.ORDERS}`,
       return: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.ORDERS}/${ROUTE_KEYS.RETURN}`
-    }
+    },
+    marketing: {
+      root: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.MARKETING}`,
+      discounts: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.MARKETING}/${ROUTE_KEYS.DISCOUNTS}`
+    },
+
   }
 };

@@ -8,7 +8,6 @@ import { ROUTE_KEYS, routePaths } from '../routes';
 const theme = {
   components: {
     Menu: {
-      /* here is your component tokens */
       darkItemSelectedBg: "#000c17",
     },
   },
@@ -30,10 +29,10 @@ const items = [
     ]
   },
   {
-    key: 'c', icon: <FontAwesomeIcon icon={faChartLine} />, label: 'Quản Lý Marketing',
+    key: ROUTE_KEYS.MARKETING, icon: <FontAwesomeIcon icon={faChartLine} />, label: 'Quản Lý Marketing',
     children: [
-      { key: "c1", label: "Tất Cả" },
-      { key: "c2", label: "Khuyến Mãi Của Shop" },
+      { key: routePaths.management.marketing.root, label: "Tất Cả" },
+      { key: routePaths.management.marketing.discounts, label: "Khuyến Mãi Của Shop" },
       { key: "c3", label: "Flash Sale Của Shop" },
       { key: "c4", label: "Mã Giảm Giá Của Shop" },
       { key: "c5", label: "Chương Trình Shopee" },
