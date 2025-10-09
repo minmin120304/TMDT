@@ -39,11 +39,11 @@ const items = [
     ]
   },
   {
-    key: 'd', icon: <FontAwesomeIcon icon={faWallet} />, label: 'Quản Lý tài chính',
+    key: ROUTE_KEYS.FINANCE, icon: <FontAwesomeIcon icon={faWallet} />, label: 'Quản Lý tài chính',
     children: [
-      { key: "d1", label: "Doanh thu" },
-      { key: "d2", label: "Tài Khoản Ngân Hàng" },
-      { key: "d3", label: "Số Dư Tài Khoản" },
+      { key: routePaths.management.finance.profit, label: "Doanh thu" },
+      { key: routePaths.management.finance.bankAccount, label: "Tài Khoản Ngân Hàng" },
+      { key: routePaths.management.finance.balance, label: "Số Dư Tài Khoản" },
     ]
   },
   {

@@ -21,6 +21,10 @@ export const ROUTE_KEYS = {
   CAMPAIGNS: "chuong-trinh-san",
 
   FINANCE: "tai-chinh",
+  PROFIT: "loi-nhuan",
+  BALANCE: "so-du-tai-khoan",
+  BANK_ACCOUNT: "tai-khoan-ngan-hang",
+
   ANALYTICS: "phan-tich",
   STORE: "cua-hang",
   NOT_FOUND: "*",
@@ -50,5 +54,11 @@ export const routePaths = {
       campaigns: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.MARKETING}/${ROUTE_KEYS.CAMPAIGNS}`
     },
 
+    finance: {
+      root: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.FINANCE}`,
+      profit: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.FINANCE}/${ROUTE_KEYS.PROFIT}`,
+      balance: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.FINANCE}/${ROUTE_KEYS.BALANCE}`,
+      bankAccount: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.FINANCE}/${ROUTE_KEYS.BANK_ACCOUNT}`,
+    },
   }
 };

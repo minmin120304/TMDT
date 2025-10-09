@@ -6,6 +6,7 @@ import MainLayout from "./layouts/MainLayout"
 import Login from "./features/Auth/Login"
 import Register from "./features/Auth/Register"
 import Dashboard from "./features/Dashboard"
+import ProfitDashboard from "./features/Finance/ProfitDashboard"
 import DiscountDashboard from "./features/Marketing/DiscountDashboard"
 import FlashSaleDashboard from "./features/Marketing/FlashSaleDashboard"
 import MarketingDashboard from "./features/Marketing/MarketingDashboard"
@@ -46,6 +47,13 @@ function Seller() {
             <Route path={ROUTE_KEYS.FLASH_SALE} element={<FlashSaleDashboard />} />
             <Route path={ROUTE_KEYS.VOUCHER} element={<VoucherDashboard />} />
             <Route path={ROUTE_KEYS.CAMPAIGNS} element={<PlatformCampaign />} />
+          </Route>
+
+          <Route path={ROUTE_KEYS.FINANCE} >
+            {/* <Route index element={<FinanceDashboard />} /> */}
+            <Route path={ROUTE_KEYS.PROFIT} element={<ProfitDashboard />} />
+            {/* <Route path={ROUTE_KEYS.BALANCE} element={<BalanceDashboard />} />
+            <Route path={ROUTE_KEYS.BANK_ACCOUNT} element={<BankAccount />} />  */}
           </Route>
         </Route>
 
