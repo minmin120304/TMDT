@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Tabs } from 'antd';
 import { Link } from 'react-router-dom';
 
-import { routePaths } from '$/routes';
+import { routePaths } from '_s/routes';
 import ProductListLayout from './components/ProductListLayout';
 
 

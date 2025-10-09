@@ -5,10 +5,14 @@
       "@/*": [
         "src/*"
       ],
-      "$/*": [
-        "src/features/seller/*",
-        "src/features/administrator/*",
-        "src/features/customer/*",
+      "_s/*": [
+        "src/features/seller/*"
+      ],
+      "_c/*": [
+        "src/features/customer/*"
+      ],
+      "_a/*": [
+        "src/features/administrator/*"
       ]
     }
   }

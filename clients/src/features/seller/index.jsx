@@ -7,7 +7,10 @@ import Login from "./features/Auth/Login"
 import Register from "./features/Auth/Register"
 import Dashboard from "./features/Dashboard"
 import DiscountDashboard from "./features/Marketing/DiscountDashboard"
+import FlashSaleDashboard from "./features/Marketing/FlashSaleDashboard"
 import MarketingDashboard from "./features/Marketing/MarketingDashboard"
+import PlatformCampaign from "./features/Marketing/PlatformCampaign"
+import VoucherDashboard from "./features/Marketing/VoucherDashboard"
 import OrderDashboard from "./features/Order/OrderDashboard"
 import ReturnOrder from "./features/Order/ReturnOrder"
 import AddProduct from "./features/Product/AddProduct"
@@ -40,6 +43,9 @@ function Seller() {
           <Route path={ROUTE_KEYS.MARKETING} >
             <Route index element={<MarketingDashboard />} />
             <Route path={ROUTE_KEYS.DISCOUNTS} element={<DiscountDashboard />} />
+            <Route path={ROUTE_KEYS.FLASH_SALE} element={<FlashSaleDashboard />} />
+            <Route path={ROUTE_KEYS.VOUCHER} element={<VoucherDashboard />} />
+            <Route path={ROUTE_KEYS.CAMPAIGNS} element={<PlatformCampaign />} />
           </Route>
         </Route>
 

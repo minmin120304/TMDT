@@ -33,9 +33,9 @@ const items = [
     children: [
       { key: routePaths.management.marketing.root, label: "Tất Cả" },
       { key: routePaths.management.marketing.discounts, label: "Khuyến Mãi Của Shop" },
-      { key: "c3", label: "Flash Sale Của Shop" },
-      { key: "c4", label: "Mã Giảm Giá Của Shop" },
-      { key: "c5", label: "Chương Trình Shopee" },
+      { key: routePaths.management.marketing.flashSale, label: "Flash Sale Của Shop" },
+      { key: routePaths.management.marketing.voucher, label: "Mã Giảm Giá Của Shop" },
+      { key: routePaths.management.marketing.campaigns, label: "Chương Trình Nhà Bán" },
     ]
   },
   {
@@ -58,6 +58,7 @@ const items = [
     children: [
       { key: "f1", label: "Hồ Sơ Shop" },
       { key: "f2", label: "Trang Trí Shop" },
+      { key: "g3", label: "Quản Lý Khiếu Nại" },
     ]
   },
   {
@@ -65,7 +66,7 @@ const items = [
     children: [
       { key: "g1", label: "Quản Lý Chat" },
       { key: "g2", label: "Quản Lý Đánh Giá" },
-      { key: "g3", label: "Quản Lý Khiếu Nại" },
+
     ]
   },
 ]

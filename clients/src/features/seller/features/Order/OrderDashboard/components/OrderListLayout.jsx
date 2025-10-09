@@ -1,6 +1,6 @@
 import { Button, Form, Input, Select, Table } from 'antd';
 
-import EmptyList from '$/components/EmptyList';
+import EmptyList from '_s/components/EmptyList';
 
 const columns = [
   { title: 'Sản phẩm', dataIndex: 'product', key: 'product', },

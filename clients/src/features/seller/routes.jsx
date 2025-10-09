@@ -2,19 +2,27 @@ export const ROUTE_KEYS = {
   ACCOUNT: "tai-khoan",
   REGISTER: "dang-ki",
   LOGIN: "dang-nhap",
+
   MANAGEMENT: "quan-ly",
-  PRODUCTS: "san-pham",
+  DASHBOARD: "dashboard",
   INSERT: "them",
   UPDATE: "chinh-sua",
   DELETE: "xoa",
+
+  PRODUCTS: "san-pham",
+
   ORDERS: "don-hang",
   RETURN: "tra-hang",
+
   MARKETING: "marketing",
   DISCOUNTS: "khuyen-mai",
+  FLASH_SALE: "flash-sale",
+  VOUCHER: "ma-giam-gia",
+  CAMPAIGNS: "chuong-trinh-san",
+
   FINANCE: "tai-chinh",
   ANALYTICS: "phan-tich",
   STORE: "cua-hang",
-  DASHBOARD: "dashboard",
   NOT_FOUND: "*",
 };
 
@@ -36,7 +44,10 @@ export const routePaths = {
     },
     marketing: {
       root: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.MARKETING}`,
-      discounts: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.MARKETING}/${ROUTE_KEYS.DISCOUNTS}`
+      discounts: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.MARKETING}/${ROUTE_KEYS.DISCOUNTS}`,
+      flashSale: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.MARKETING}/${ROUTE_KEYS.FLASH_SALE}`,
+      voucher: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.MARKETING}/${ROUTE_KEYS.VOUCHER}`,
+      campaigns: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.MARKETING}/${ROUTE_KEYS.CAMPAIGNS}`
     },
 
   }
