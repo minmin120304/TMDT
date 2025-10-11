@@ -66,21 +66,21 @@ export default function ProfitDashboard() {
               {/* Paid */}
               <div>
                 <h3 className="font-medium text-gray-700 mb-2">Đã thanh toán</h3>
-                <div className="space-y-4">
+                <div className="grid grid-cols-3 gap-5">
                   <div>
                     <p className="text-gray-600 text-sm ">Tuần này</p>
                     <p className="text-lg font-semibold text-gray-800">₫ 0</p>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-gray-600 text-sm ">Tháng này</p>
-                      <p className="text-lg font-semibold text-gray-800">₫ 0</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-600 text-sm ">Tổng cộng</p>
-                      <p className="text-lg font-semibold text-gray-800">₫ 0</p>
-                    </div>
+
+                  <div>
+                    <p className="text-gray-600 text-sm ">Tháng này</p>
+                    <p className="text-lg font-semibold text-gray-800">₫ 0</p>
                   </div>
+                  <div>
+                    <p className="text-gray-600 text-sm ">Tổng cộng</p>
+                    <p className="text-lg font-semibold text-gray-800">₫ 0</p>
+                  </div>
+
                 </div>
               </div>
             </div>

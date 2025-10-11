@@ -7,9 +7,7 @@ import { ROUTE_KEYS, routePaths } from '../routes';
 
 const theme = {
   components: {
-    Menu: {
-      darkItemSelectedBg: "#000c17",
-    },
+    Menu: { darkItemSelectedBg: "#000c17", },
   },
 }
 const items = [
@@ -47,10 +45,10 @@ const items = [
     ]
   },
   {
-    key: 'e', icon: <FontAwesomeIcon icon={faSquarePollVertical} />, label: 'Phân tích dữ liệu',
+    key: ROUTE_KEYS.ANALYTICS, icon: <FontAwesomeIcon icon={faSquarePollVertical} />, label: 'Phân tích dữ liệu',
     children: [
-      { key: "e1", label: "Phân Tích Bán Hàng" },
-      { key: "e2", label: "Hiệu Quả Hoạt Động" },
+      { key: routePaths.analytics.root, label: "Phân Tích Bán Hàng" },
+      { key: routePaths.analytics.performance, label: "Hiệu Quả Hoạt Động" },
     ]
   },
   {
