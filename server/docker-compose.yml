@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    ports:
+      - "4566:4566" # main edge endpoint for all services
+      - "4571:4571"
+    environment:
+      # Enable all AWS free-tier services (you can add/remove as needed)
+      - SERVICES=s3,lambda,sqs,sns,dynamodb,cloudwatch,cloudformation,iam,sts,events,secretsmanager,ssm
+      - DEBUG=1
+      - DATA_DIR=/var/lib/localstack/data # persist service state
+      - AWS_DEFAULT_REGION=ap-southeast-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - LOCALSTACK_HOST=localstack
+      - LAMBDA_EXECUTOR=docker
+      - HOST_TMP_FOLDER=/tmp/localstack
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      # persist all data locally
+      - "./localstack-data:/var/lib/localstack"
+      # allow LocalStack to spawn Docker containers for Lambdas
+      - "/var/run/docker.sock:/var/run/docker.sock"

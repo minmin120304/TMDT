@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DatabaseModels.Models;
 
-public class NguoiDung
+public class TaiKhoanNguoiBan
 {
   [Key]
   public int Id { get; set; }
@@ -22,3 +22,4 @@ public enum GioiTinh
   NU,
   KHAC
 }
+

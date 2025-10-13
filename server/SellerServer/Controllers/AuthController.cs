@@ -27,7 +27,7 @@ public class AuthController(IConfiguration config, AppDbContext dbContext) : Con
       await RegisterRequest.ValidateRegisterRequest(dbContext, request);
 
       var (hash, salt) = AuthUtilities.GeneratePasswordHash(request.MatKhau!);
-      NguoiDung nguoiDung = new()
+      TaiKhoanNguoiBan nguoiDung = new()
       {
         HoTen = request.HoTen,
         SoDienThoai = request.SoDienThoai,
@@ -36,7 +36,7 @@ public class AuthController(IConfiguration config, AppDbContext dbContext) : Con
         Salt = salt,
       };
 
-      await dbContext.NguoiDung.AddAsync(nguoiDung);
+      await dbContext.TaiKhoanNguoiBan.AddAsync(nguoiDung);
       await dbContext.SaveChangesAsync();
 
       return Ok(new ResponseFormat
@@ -108,7 +108,7 @@ public class LoginRequest
 {
   public static async Task ValidateLoginRequest(AppDbContext dbContext, LoginRequest request)
   {
-    NguoiDung? nguoiDung = await dbContext.NguoiDung.FirstOrDefaultAsync(i => i.Email == request.Email);
+    TaiKhoanNguoiBan? nguoiDung = await dbContext.TaiKhoanNguoiBan.FirstOrDefaultAsync(i => i.Email == request.Email);
 
     if (nguoiDung == null)
     {
@@ -134,7 +134,7 @@ public class RegisterRequest
       throw new Exception("Invalid input");
     }
 
-    if (await dbContext.NguoiDung.FirstOrDefaultAsync(i => i.Email == request.Email) != null)
+    if (await dbContext.TaiKhoanNguoiBan.FirstOrDefaultAsync(i => i.Email == request.Email) != null)
     {
       throw new Exception("Email is existed.");
     }
