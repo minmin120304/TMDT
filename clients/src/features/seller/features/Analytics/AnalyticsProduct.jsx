@@ -1,7 +1,8 @@
 import { DownloadOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Card, Checkbox, Empty, Select, Table, Tabs, Tooltip } from 'antd';
+import { Button, Card, Checkbox, Empty, Form, Select, Table, Tabs, Tooltip } from 'antd';
 import { useState } from 'react';
 import { CartesianGrid, Legend, Line, LineChart, Tooltip as RechartsTooltip, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import Container from '_s/components/Container';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -39,122 +40,70 @@ const AnalyticsProduct = () => {
   );
 
   const topProductsColumns = [
-    {
-      title: 'Thứ hạng',
-      dataIndex: 'rank',
-      key: 'rank',
-      width: 80,
-    },
-    {
-      title: 'Thông tin sản phẩm',
-      dataIndex: 'productName',
-      key: 'productName',
-    },
-    {
-      title: 'Lượt truy cập',
-      dataIndex: 'views',
-      key: 'views',
-      align: 'right',
-    },
-    {
-      title: 'Tỉ lệ',
-      dataIndex: 'rate',
-      key: 'rate',
-      align: 'right',
-    },
-    {
-      title: 'Thay đổi',
-      dataIndex: 'change',
-      key: 'change',
-      align: 'right',
-    },
+    { title: 'Thứ hạng', dataIndex: 'rank', key: 'rank', width: 80, },
+    { title: 'Thông tin sản phẩm', dataIndex: 'productName', key: 'productName', },
+    { title: 'Lượt truy cập', dataIndex: 'views', key: 'views', align: 'right', },
+    { title: 'Tỉ lệ', dataIndex: 'rate', key: 'rate', align: 'right', },
+    { title: 'Thay đổi', dataIndex: 'change', key: 'change', align: 'right', },
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen p-6">
+    <div className="space-y-5">
       {/* Header */}
-      <div className="bg-white rounded-lg mb-4">
-        <Tabs
-          activeKey={activeTab}
-          onChange={setActiveTab}
-          className="px-4"
-        >
-          <TabPane tab="Tổng quan về sản phẩm" key="1" />
-          <TabPane tab="Hiệu quả của sản phẩm" key="2" />
-          <TabPane tab="Sản phẩm cần cải thiện" key="3" />
-        </Tabs>
-      </div>
+      <Container>
+        <Tabs items={[
+          {
+            key: '1', label: "Tổng quan về sản phẩm", children:
+              <Form layout='inline'>
+                <Form.Item label="Khoảng thời gian" className='w-100'>
+                  <Select />
+                </Form.Item>
+                <Form.Item>
+                  <Button variant='solid' color='blue'>Xuất dữ liệu</Button>
+                </Form.Item>
+              </Form>
+          },
+          {
+            key: '2', label: "Hiệu quả của sản phẩm", children:
 
-      {/* Date and Export Section */}
-      <Card className="mb-4">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <span className="text-gray-600">Không Thời Gian</span>
-            <Select defaultValue="today" className="w-64">
-              <Option value="today">Hôm nay Từ 21:00 hôm nay (GMT+07)</Option>
-              <Option value="yesterday">Hôm qua</Option>
-              <Option value="last7days">7 ngày qua</Option>
-            </Select>
-          </div>
-          <Button icon={<DownloadOutlined />}>
-            Tải dữ liệu
-          </Button>
-        </div>
-      </Card>
+              <Form layout='inline'>
+                <Form.Item label="Khoảng thời gian" className='w-100'>
+                  <Select />
+                </Form.Item>
+                <Form.Item>
+                  <Button variant='solid' color='blue'>Xuất dữ liệu</Button>
+                </Form.Item>
+              </Form>
+          },
+          {
+            key: '3', label: "Sản phẩm cần cải thiện", children:
 
+              <Form layout='inline'>
+                <Form.Item label="Khoảng thời gian" className='w-100'>
+                  <Select />
+                </Form.Item>
+                <Form.Item>
+                  <Button variant='solid' color='blue'>Xuất dữ liệu</Button>
+                </Form.Item>
+              </Form>
+          },
+        ]} />
+      </Container>
       {/* Metrics Overview */}
       <Card title="Tổng quan về sản phẩm" className="mb-4">
         {/* Traffic Section */}
         <div className="mb-8">
           <div className="text-sm font-medium mb-4 text-gray-700">Lượt truy cập</div>
           <div className="grid grid-cols-4 gap-6">
-            <MetricCard
-              title="Số khách truy cập sản phẩm"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-              info="Số lượt khách truy cập sản phẩm"
-            />
-            <MetricCard
-              title="Lượt xem trang sản phẩm"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-              info="Tổng số lượt xem trang sản phẩm"
-            />
-            <MetricCard
-              title="Số sản phẩm được xem"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <MetricCard
-              title="Số lượng khách thoát trang sản phẩm"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-            />
+            <MetricCard title="Số khách truy cập sản phẩm" value="0" percentage="0.00%" change="0.00%" info="Số lượt khách truy cập sản phẩm" />
+            <MetricCard title="Lượt xem trang sản phẩm" value="0" percentage="0.00%" change="0.00%" info="Tổng số lượt xem trang sản phẩm" />
+            <MetricCard title="Số sản phẩm được xem" value="0" percentage="0.00%" change="0.00%" />
+            <MetricCard title="Số lượng khách thoát trang sản phẩm" value="0" percentage="0.00%" change="0.00%" />
           </div>
           <div className="grid grid-cols-4 gap-6 mt-6">
-            <MetricCard
-              title="Tỷ lệ thoát trang sản phẩm"
-              value="0.00%"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <MetricCard
-              title="Lượt click từ Trang tìm kiếm"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <MetricCard
-              title="Lượt thích"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <div></div>
+            <MetricCard title="Tỷ lệ thoát trang sản phẩm" value="0.00%" percentage="0.00%" change="0.00%" />
+            <MetricCard title="Lượt click từ Trang tìm kiếm" value="0" percentage="0.00%" change="0.00%" />
+            <MetricCard title="Lượt thích" value="0" percentage="0.00%" change="0.00%" />
           </div>
         </div>
 
@@ -162,62 +111,20 @@ const AnalyticsProduct = () => {
         <div className="mb-8">
           <div className="text-sm font-medium mb-4 text-gray-700">Thêm vào giỏ hàng</div>
           <div className="grid grid-cols-4 gap-6">
-            <MetricCard
-              title="Số khách truy cập sản phẩm"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <MetricCard
-              title="Sản phẩm"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <MetricCard
-              title="Tỷ lệ chuyển đổi"
-              value="0.00%"
-              percentage="0.00%"
-              change="0.00%"
-            />
+            <MetricCard title="Số khách truy cập sản phẩm" value="0" percentage="0.00%" change="0.00%" />
+            <MetricCard title="Sản phẩm" value="0" percentage="0.00%" change="0.00%" />
+            <MetricCard title="Tỷ lệ chuyển đổi" value="0.00%" percentage="0.00%" change="0.00%" />
             <div></div>
           </div>
           <div className="grid grid-cols-4 gap-6 mt-6">
-            <MetricCard
-              title="Người mua"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <MetricCard
-              title="Sản phẩm"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <MetricCard
-              title="Số sản phẩm đã bán"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <MetricCard
-              title="Doanh số"
-              value="₫ 0"
-              percentage="0.00%"
-              change="0.00%"
-            />
+            <MetricCard title="Người mua" value="0" percentage="0.00%" change="0.00%" />
+            <MetricCard title="Sản phẩm" value="0" percentage="0.00%" change="0.00%" />
+            <MetricCard title="Số sản phẩm đã bán" value="0" percentage="0.00%" change="0.00%" />
+            <MetricCard title="Doanh số" value="₫ 0" percentage="0.00%" change="0.00%" />
           </div>
           <div className="grid grid-cols-4 gap-6 mt-6">
-            <MetricCard
-              title="Tỷ lệ chuyển đổi"
-              value="0.00%"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <div></div>
-            <div></div>
-            <div></div>
+            <MetricCard title="Tỷ lệ chuyển đổi" value="0.00%" percentage="0.00%" change="0.00%" />
+
           </div>
         </div>
 
@@ -225,46 +132,14 @@ const AnalyticsProduct = () => {
         <div>
           <div className="text-sm font-medium mb-4 text-gray-700">Đơn hàng đã đặt</div>
           <div className="grid grid-cols-4 gap-6">
-            <MetricCard
-              title="Người mua"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <MetricCard
-              title="Sản phẩm"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <MetricCard
-              title="Sản phẩm được duyệt"
-              value="0"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <MetricCard
-              title="Doanh số"
-              value="₫ 0"
-              percentage="0.00%"
-              change="0.00%"
-            />
+            <MetricCard title="Người mua" value="0" percentage="0.00%" change="0.00%" />
+            <MetricCard title="Sản phẩm" value="0" percentage="0.00%" change="0.00%" />
+            <MetricCard title="Sản phẩm được duyệt" value="0" percentage="0.00%" change="0.00%" />
+            <MetricCard title="Doanh số" value="₫ 0" percentage="0.00%" change="0.00%" />
           </div>
           <div className="grid grid-cols-4 gap-6 mt-6">
-            <MetricCard
-              title="Tỷ lệ chuyển đổi"
-              value="0.00%"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <MetricCard
-              title="Tỷ lệ chuyển đổi (Từ Đơn đã đặt thành Đơn đã xác nhận)"
-              value="0.00%"
-              percentage="0.00%"
-              change="0.00%"
-            />
-            <div></div>
-            <div></div>
+            <MetricCard title="Tỷ lệ chuyển đổi" value="0.00%" percentage="0.00%" change="0.00%" />
+            <MetricCard title="Tỷ lệ chuyển đổi (Từ Đơn đã đặt thành Đơn đã xác nhận)" value="0.00%" percentage="0.00%" change="0.00%" />
           </div>
         </div>
       </Card>

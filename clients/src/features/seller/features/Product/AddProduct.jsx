@@ -1,4 +1,4 @@
-import { EditOutlined, MessageOutlined, MinusCircleOutlined, PlusOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { EditOutlined, MessageOutlined, PlusOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Affix, Avatar, Button, Form, Input, Upload } from 'antd';
 
 const { TextArea } = Input;
@@ -6,7 +6,7 @@ const { TextArea } = Input;
 function AddProduct() {
   return (
     <div className="grid grid-cols-[1fr_auto] gap-5 p-5" >
-      <Form layout='vertical' >
+      <Form layout='horizontal' labelCol={{ span: 4 }} >
         <div className='bg-white p-5 rounded'>
           <h2 className="text-lg font-medium">Thông tin cơ bản</h2>
 
@@ -51,21 +51,21 @@ function AddProduct() {
             <Input placeholder="Chọn ngành hàng" suffix={<EditOutlined className="text-gray-400" />} />
           </Form.Item>
 
-          {/* Product Description */}
-          <Form.Item label="Mô tả sản phẩm">
-            <TextArea rows={10} maxLength={3000} style={{ resize: 'none' }} placeholder="Nhập mô tả sản phẩm..." />
-            <div className="text-right text-gray-400 mt-1">{3}/3000</div>
-          </Form.Item>
-
-          <h2 className="text-lg font-medium">Thông tin bán hàng</h2>
-
           {/* Price */}
           <Form.Item label="Giá">
             <Input prefix={<span className="text-gray-400">₫</span>} placeholder="Nhập vào" className="w-1/2" />
           </Form.Item>
 
+          {/* Product Description */}
+          <Form.Item label="Mô tả sản phẩm">
+            {/* <TiptapEditor /> */}
+            <TextArea rows={10} maxLength={3000} style={{ resize: 'none' }} placeholder="Nhập mô tả sản phẩm..." />
+            <div className="text-right text-gray-400 mt-1">{3}/3000</div>
+          </Form.Item>
+
+
           {/* Bulk Discount */}
-          <Form.Item label="Mua nhiều giảm giá">
+          {/* <Form.Item label="Mua nhiều giảm giá">
             <Form.List name="discounts">
               {(fields, { add, remove }) => (
                 <div className='flex flex-col'>
@@ -89,7 +89,7 @@ function AddProduct() {
                 </div>
               )}
             </Form.List>
-          </Form.Item>
+          </Form.Item> */}
         </div>
       </Form>
 
