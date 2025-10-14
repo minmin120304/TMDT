@@ -14,7 +14,7 @@ namespace SellerServer.Controllers;
 
 [ApiController]
 [Route("api/tai-khoan")]
-public class AuthController(IConfiguration config, AppDbContext dbContext) : ControllerBase
+public class TaiKhoanController(IConfiguration config, AppDbContext dbContext) : ControllerBase
 {
   private readonly IConfiguration _config = config;
   private readonly AppDbContext dbContext = dbContext;

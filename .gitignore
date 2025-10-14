@@ -8,12 +8,8 @@ obj/
 dist*
 Migrations/
 appsettings.json
-appsettings.Development.json
-appsettings.Production.json
-appsettings.Staging.json
 appsettings.Testing.json
 appsettings.Development.json
 appsettings.Production.json
 appsettings.Staging.json
-appsettings.Testing.json
 *localstack*

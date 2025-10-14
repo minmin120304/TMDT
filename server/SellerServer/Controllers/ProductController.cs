@@ -2,15 +2,16 @@ using DatabaseModels;
 using DatabaseModels.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using Microsoft.EntityFrameworkCore;
 using Utilities;
 
 namespace SellerServer.Controllers;
 
 [ApiController]
 [Route("api/san-pham")]
-public class ProductController(IConfiguration configuration, AppDbContext dbContext, S3Service s3Service) : ControllerBase
+public class SanPhamController(IConfiguration configuration, AppDbContext dbContext, S3Service s3Service) : ControllerBase
 {
-  readonly IConfiguration _config = configuration;
+  readonly IConfiguration config = configuration;
   readonly AppDbContext dbContext = dbContext;
   readonly S3Service s3 = s3Service;
 
@@ -19,11 +20,37 @@ public class ProductController(IConfiguration configuration, AppDbContext dbCont
   {
     try
     {
+      var danhSachSanPham = await dbContext.SanPham
+        .Join(
+          dbContext.PhienBanSanPham,
+          sp => sp.Id,
+          pb => pb.SanPhamId,
+          (sp, pb) => new { sp, pb })
+        .Where(i => i.sp.NguoiBanId == nguoiBanId)
+        .OrderByDescending(i => i.pb.NgayTao)
+        .Take(1)
+        .Select(o => new
+        {
+          o.sp.Id,
+          o.sp.NguoiBanId,
+          TrangThaiSanPham = o.sp.TrangThaiSanPham.ToString(),
+          PhienBanId = o.pb.Id,
+          o.pb.TenSanPham,
+          o.pb.MoTaSanPham,
+          o.pb.GiaBan,
+          NgayChinhSuaCuoi = o.pb.NgayTao,
+          AnhBia = dbContext.MediaSanPham
+            .Where(i => i.LoaiHinhAnhSanPham == LoaiHinhAnhSanPham.HINH_ANH_BIA)
+            .OrderByDescending(i => i.NgayTao)
+            .Select(i => i.Url)
+            .FirstOrDefault(),
+          DoanhSoBanHang = 0 // Cai dat sau
+        }).ToListAsync();
       return Ok(new ResponseFormat()
       {
         Success = true,
         Message = "",
-        Data = new List<object>()
+        Data = danhSachSanPham
       });
     }
     catch (Exception err)
@@ -37,66 +64,115 @@ public class ProductController(IConfiguration configuration, AppDbContext dbCont
     }
   }
 
+  [HttpPost("tai-hinh-anh")]
+  [Consumes("multipart/form-data")]
+  public async Task<IActionResult> CapNhatMediaSanPham([FromForm] List<CapNhatHinhAnhRequest> files)
+  {
+    try
+    {
+      List<MediaSanPham> media = [];
+      foreach (var item in files)
+      {
+        media.Add(new MediaSanPham()
+        {
+          NgayTao = DateTime.UtcNow,
+          Url = await s3.UploadFileAsync(item.File),
+          LoaiHinhAnhSanPham = item.LoaiHinhAnhSanPham
+        });
+      }
+      await dbContext.MediaSanPham.AddRangeAsync(media);
+      await dbContext.SaveChangesAsync();
+
+      return Ok(new ResponseFormat
+      {
+        Data = media,
+        Success = true,
+        Message = ""
+      });
+    }
+    catch (Exception err)
+    {
+      return BadRequest(new ResponseFormat
+      {
+        Data = null,
+        Success = false,
+        Message = err.Message
+      });
+    }
+  }
+
   [HttpPost("cap-nhat-san-pham")]
   public async Task<IActionResult> CapNhatSanPham([FromForm] CapNhatSanPhamRequest request)
   {
-    if (string.IsNullOrWhiteSpace(request.TenSanPham))
-      return BadRequest("Tên sản phẩm không được để trống.");
-
-    // Upload all provided files
-    var uploadTasks = new List<Task<(string key, string? url)>>();
-    async Task<(string, string?)> UploadIfExists(string key, IFormFile? file)
+    try
     {
-      if (file == null) return (key, null);
-      var url = await s3.UploadFileAsync(file);
-      return (key, url);
+      SanPham? sanPham = await dbContext.SanPham.FirstOrDefaultAsync(i => i.Id == request.SanPhamId);
+      if (sanPham == null)
+      {
+        sanPham = new()
+        {
+          NguoiBanId = request.NguoiBanId,
+          TrangThaiSanPham = TrangThaiSanPham.BAN_NHAP,
+        };
+        await dbContext.SanPham.AddAsync(sanPham);
+        await dbContext.SaveChangesAsync();
+      }
+
+      PhienBanSanPham phienBanSanPham = new()
+      {
+        NganhHangId = request.NganhHangId,
+        SanPhamId = sanPham.Id,
+        TenSanPham = request.TenSanPham,
+        MoTaSanPham = request.MoTaSanPham,
+        GiaBan = request.GiaBan,
+        NgayTao = DateTime.UtcNow
+      };
+      await dbContext.PhienBanSanPham.AddAsync(phienBanSanPham);
+      await dbContext.SaveChangesAsync();
+
+      return Ok(new ResponseFormat
+      {
+        Message = "Cập nhật sản phẩm thành công",
+        Success = true
+      });
+    }
+    catch (Exception err)
+    {
+      return BadRequest(new ResponseFormat
+      {
+        Data = err,
+        Success = false
+      });
     }
 
-    uploadTasks.Add(UploadIfExists(nameof(request.HinhAnhSanPham1), request.HinhAnhSanPham1));
-    uploadTasks.Add(UploadIfExists(nameof(request.HinhAnhSanPham2), request.HinhAnhSanPham2));
-    uploadTasks.Add(UploadIfExists(nameof(request.HinhAnhSanPham3), request.HinhAnhSanPham3));
-    uploadTasks.Add(UploadIfExists(nameof(request.HinhAnhSanPham4), request.HinhAnhSanPham4));
-    uploadTasks.Add(UploadIfExists(nameof(request.HinhAnhSanPham5), request.HinhAnhSanPham5));
-    uploadTasks.Add(UploadIfExists(nameof(request.HinhAnhSanPham6), request.HinhAnhSanPham6));
-    uploadTasks.Add(UploadIfExists(nameof(request.HinhAnhSanPham7), request.HinhAnhSanPham7));
-    uploadTasks.Add(UploadIfExists(nameof(request.HinhAnhSanPham8), request.HinhAnhSanPham8));
-    uploadTasks.Add(UploadIfExists(nameof(request.HinhAnhSanPham9), request.HinhAnhSanPham9));
-    uploadTasks.Add(UploadIfExists(nameof(request.AnhBiaSanPham), request.AnhBiaSanPham));
-    uploadTasks.Add(UploadIfExists(nameof(request.VideoSanPham), request.AnhBiaSanPham));
-
-    var uploadedFiles = (await Task.WhenAll(uploadTasks))
-        .Where(r => r.url != null)
-        .ToDictionary(r => r.key, r => r.url);
-
-    // Example: Save product info + image URLs to database (pseudo)
-    var sanPham = new
-    {
-      request.NguoiBanId,
-      request.NganhHangId,
-      request.TenSanPham,
-      request.MoTaSanPham,
-      request.GiaBan,
-      request.NgayTao,
-      HinhAnh = uploadedFiles
-    };
-
-    return Ok(new
-    {
-      message = "Cập nhật sản phẩm thành công",
-      sanPham
-    });
   }
 
   [HttpPut("cap-nhat-trang-thai")]
   public async Task<IActionResult> CapNhatTrangThaiSanPham(CapNhatTrangThaiRequest request)
   {
-    return Ok();
-  }
+    try
+    {
+      SanPham? sanPham = await dbContext.SanPham.FirstOrDefaultAsync(i => i.Id == request.SanPhamId);
+      if (sanPham == null) throw new Exception("");
 
-  [HttpDelete]
-  public async Task<IActionResult> XoaSanPham(int id)
-  {
-    return Ok();
+      sanPham.TrangThaiSanPham = request.TrangThaiSanPham;
+      await dbContext.SaveChangesAsync();
+
+
+      return Ok(new ResponseFormat
+      {
+        Success = true
+      });
+    }
+    catch (Exception err)
+    {
+      return BadRequest(new ResponseFormat
+      {
+        Success = false,
+        Data = err
+      });
+    }
+
   }
 }
 
@@ -106,26 +182,22 @@ public class CapNhatTrangThaiRequest
   public TrangThaiSanPham TrangThaiSanPham { get; set; }
 }
 
+public class CapNhatHinhAnhRequest
+{
+  public int? SanPhamId { get; set; }
+  public LoaiHinhAnhSanPham LoaiHinhAnhSanPham { get; set; }
+  public IFormFile File { get; set; } = null!;
+}
+
 public class CapNhatSanPhamRequest
 {
-  public int SanPhamId { get; set; }
-  public int NguoiBanId { get; set; }
-  public int NganhHangId { get; set; }
+  public int? SanPhamId { get; set; }
+  public int? NguoiBanId { get; set; }
+  public int? NganhHangId { get; set; }
   public string? TenSanPham { get; set; }
   public string? MoTaSanPham { get; set; }
   public double GiaBan { get; set; }
   public DateTime NgayTao { get; set; }
-  public IFormFile? HinhAnhSanPham1 { get; set; }
-  public IFormFile? HinhAnhSanPham2 { get; set; }
-  public IFormFile? HinhAnhSanPham3 { get; set; }
-  public IFormFile? HinhAnhSanPham4 { get; set; }
-  public IFormFile? HinhAnhSanPham5 { get; set; }
-  public IFormFile? HinhAnhSanPham6 { get; set; }
-  public IFormFile? HinhAnhSanPham7 { get; set; }
-  public IFormFile? HinhAnhSanPham8 { get; set; }
-  public IFormFile? HinhAnhSanPham9 { get; set; }
-  public IFormFile? AnhBiaSanPham { get; set; }
-  public IFormFile? VideoSanPham { get; set; }
 }
 
 public class CapNhatTrangThaiSanPhamRequest

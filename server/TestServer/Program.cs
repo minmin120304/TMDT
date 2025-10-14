@@ -4,9 +4,24 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSingleton<S3Service>(options =>
+{
+  var config = options.GetRequiredService<IConfiguration>();
+  var awsConfig = config.GetSection("AWS").Get<S3ServiceParam>();
+  return new(awsConfig);
+});
+builder.WebHost.ConfigureKestrel(options =>
+{
+  // options.ListenAnyIP(5216); // HTTP
+  // options.ListenAnyIP(7136, listenOptions =>
+  // {
+  //   listenOptions.UseHttps(); // auto-picks dev cert
+  // });
+});
 builder.Services.AddCors(options =>
 {
   options.AddDefaultPolicy(policy =>

@@ -1,5 +1,6 @@
 using Amazon;
 using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Microsoft.AspNetCore.Http;
 
@@ -47,6 +48,26 @@ public class S3Service
       $"{param.ServiceURL}/{_bucketName}/{fileName}" :
       $"https://{_bucketName}.s3.amazonaws.com/{fileName}";
   }
+
+  public async Task<bool> DeleteFileAsync(string key)
+  {
+    try
+    {
+      var request = new DeleteObjectRequest
+      {
+        BucketName = _bucketName,
+        Key = key
+      };
+      await _s3Client.DeleteObjectAsync(request);
+      return true;
+    }
+    catch (AmazonS3Exception ex)
+    {
+      Console.WriteLine($"[S3 ERROR] {ex.Message}");
+      return false;
+    }
+  }
+
 }
 
 public struct S3ServiceParam

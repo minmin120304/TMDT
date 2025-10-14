@@ -14,6 +14,8 @@ public class TaiKhoanNguoiBan
   public GioiTinh? GioiTinh { get; set; } = Models.GioiTinh.KHAC;
   public DateTime SinhNhat { get; set; }
   public DateTime? NgayTao { get; set; } = DateTime.UtcNow;
+
+  public List<SanPham>? SanPham { get; set; }
 }
 
 public enum GioiTinh
