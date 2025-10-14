@@ -15,7 +15,7 @@ public class ProductController(IConfiguration configuration, AppDbContext dbCont
   readonly S3Service s3 = s3Service;
 
   [HttpGet]
-  public async Task<IActionResult> LayDanhSachSanPham(int nguoiBanId)
+  public async Task<IActionResult> LayDanhSachSanPham([FromQuery] int nguoiBanId)
   {
     try
     {

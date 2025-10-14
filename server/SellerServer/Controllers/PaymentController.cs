@@ -10,7 +10,7 @@ using Microsoft.VisualBasic;
 namespace SellerServer.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/thanh-toan")]
 public class PaymentController(IConfiguration configuration) : ControllerBase
 {
   readonly IConfiguration _config = configuration;

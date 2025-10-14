@@ -41,12 +41,11 @@ public class MediaSanPham
 {
   [Key]
   public int Id { get; set; }
-  public int MediaId { get; set; }
   public int PhienBanSanPhamId { get; set; }
 
   public LoaiHinhAnhSanPham LoaiHinhAnhSanPham { get; set; }
 
-  public Media? HinhAnh { get; set; }
+  public string? Url { get; set; }
   public PhienBanSanPham? PhienBanSanPham { get; set; }
 }
 
@@ -61,10 +60,11 @@ public class NganhHang
 {
   [Key]
   public int Id { get; set; }
-  public int NganhHangChaId { get; set; }
+  public int? NganhHangChaId { get; set; }
 
   public string? TenNganhHang { get; set; }
 
-  public List<NganhHang>? DanhSachNganhHang { get; set; }
+  public NganhHang? NganhHangCha { get; set; }
+  public List<NganhHang>? NganhHangCon { get; set; }
 }
 

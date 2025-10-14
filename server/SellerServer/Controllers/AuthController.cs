@@ -13,7 +13,7 @@ using Utilities;
 namespace SellerServer.Controllers;
 
 [ApiController]
-[Route("api/auth")]
+[Route("api/tai-khoan")]
 public class AuthController(IConfiguration config, AppDbContext dbContext) : ControllerBase
 {
   private readonly IConfiguration _config = config;
