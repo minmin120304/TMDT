@@ -6,59 +6,20 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Utilities;
 
-var builder = WebApplication.CreateBuilder(args);
-
+var builder = ServerTemplate.CreateTemplateServer(args);
 builder.Services.AddSingleton<S3Service>(options =>
 {
   var config = options.GetRequiredService<IConfiguration>();
   var awsConfig = config.GetSection("AWS").Get<S3ServiceParam>();
   return new(awsConfig);
 });
-builder.WebHost.ConfigureKestrel(options =>
-{
-  // options.ListenAnyIP(5216); // HTTP
-  // options.ListenAnyIP(7136, listenOptions =>
-  // {
-  //   listenOptions.UseHttps(); // auto-picks dev cert
-  // });
-});
-builder.Services.AddCors(options =>
-{
-  options.AddDefaultPolicy(policy =>
-    {
-      policy.SetIsOriginAllowed(_ => true)
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials();
-    });
-});
-builder.Services.AddControllers().AddNewtonsoftJson(options =>
-  options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-  options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
 {
-  c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-  {
-    Name = "Authorization",
-    Type = SecuritySchemeType.ApiKey,
-    Scheme = "Bearer",
-    BearerFormat = "JWT",
-    In = ParameterLocation.Header,
-    Description = "Enter 'Bearer {token}'"
-  });
-  c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-      {
-        new ()
-        {
-          Reference = new () { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-        },
-        Array.Empty<string>()
-      }
-    });
+
+  options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
 });
+
 builder.Services.AddAuthentication(options =>
 {
   options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -80,6 +41,14 @@ builder.Services.AddAuthentication(options =>
 });
 
 var app = builder.Build();
+
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+var config = app.Services.GetRequiredService<IConfiguration>();
+foreach (var configEntry in config.AsEnumerable())
+{
+  logger.LogInformation("Config Key: {Key}, Value: {Value}", configEntry.Key, configEntry.Value);
+}
+
 if (app.Environment.IsDevelopment())
 {
   app.UseSwagger();

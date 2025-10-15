@@ -1,9 +1,78 @@
-version: "3.8"
-
 services:
+  seller-client:
+    build:
+      context: ./clients
+      dockerfile: dockerfile
+      args:
+        - VITE_MODE=seller
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+      - VITE_SERVER_URL=
+    volumes:
+      - ./clients/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  customer-client:
+    build:
+      context: ./clients
+      dockerfile: dockerfile
+      args:
+        - VITE_MODE=customer
+    ports:
+      - "81:80"
+    environment:
+      - NODE_ENV=production
+      - VITE_SERVER_URL=
+    volumes:
+      - ./clients/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  administrator-client:
+    build:
+      context: ./clients
+      dockerfile: dockerfile
+      args:
+        - VITE_MODE=administrator
+    ports:
+      - "82:80"
+    environment:
+      - NODE_ENV=production
+      - VITE_SERVER_URL=
+    volumes:
+      - ./clients/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  seller-server:
+    container_name: seller-server
+    build:
+      context: ./server
+      dockerfile: dockerfile.seller
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__PostgresConnection=Host=database;Port=5432;Database=TMDT;Username=postgres;Password=admin
+      - Jwt__Key=your_super_secret_key_123456
+      - Jwt__Issuer=yourapp
+      - Jwt__Audience=yourapp_users
+      - VNPAY__VNP_TmnCode=
+      - VNPAY__VNP_HashSecret=
+      - VNPAY__VNP_Url=
+      - VNPAY__VNP_ReturnUrl=
+      - AWS_Profile=default
+      - AWS_RegionEndpoint=ap-southeast-1
+      - AWS_AccessKey=test
+      - AWS_SecretKey=test
+      - AWS_BucketName=tmdt-bucket
+      - AWS_UseLocalStack=true
+      - AWS_ServiceURL=http://localstack:4566
+    networks:
+      - expose
+      - database
+      - localstack
+
   localstack:
-    image: localstack/localstack:latest
     container_name: localstack
+    image: localstack/localstack:latest
     ports:
       - "4566:4566" # main edge endpoint for all services
       - "4571:4571"
@@ -21,6 +90,38 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
       # persist all data locally
-      - "./localstack-data:/var/lib/localstack"
+      - localstack-data:/var/lib/localstack
       # allow LocalStack to spawn Docker containers for Lambdas
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - localstack
+
+  database:
+    container_name: database
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: TMDT
+    ports:
+      - "8000:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - database
+
+volumes:
+  db-data:
+  localstack-data:
+
+networks:
+  expose:
+  database:
+  localstack:

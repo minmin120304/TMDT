@@ -1,7 +1,7 @@
 import { Button, Select, Tabs } from 'antd';
 import { useState } from 'react';
 
-import OrderListLayout from './components/ORderListLayout';
+import OrderListLayout from './components/OrderListLayout';
 
 const topTabs = [
   { key: 'all', label: <p className='px-3'>Tất cả</p>, children: <OrderListLayout /> },

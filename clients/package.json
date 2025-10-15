@@ -7,9 +7,7 @@
     "dev-customer": "vite --mode customer --open",
     "dev-seller": "vite --mode seller --open",
     "dev-administrator": "vite --mode administrator --open",
-    "build-customer": "vite build --mode customer ",
-    "build-seller": "vite build --mode seller ",
-    "build-administrator": "vite build --mode administrator ",
+    "build": "vite build",
     "dev": "concurrently \"npm:dev-*\"",
     "lint": "eslint .",
     "preview": "vite preview"
