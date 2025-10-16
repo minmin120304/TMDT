@@ -41,13 +41,31 @@ services:
     volumes:
       - ./clients/nginx.conf:/etc/nginx/conf.d/default.conf:ro
 
+  customer-server:
+    container_name: customer-server
+    build:
+      context: ./server
+      dockerfile: dockerfile.customer
+    ports:
+      - 8081:8081
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/TMDT
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=none
+      - SERVER_PORT=8081
+    networks:
+      - expose
+      - database
+      - localstack
+
   seller-server:
     container_name: seller-server
     build:
       context: ./server
       dockerfile: dockerfile.seller
     ports:
-      - "8080:8080"
+      - 8080:8080
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__PostgresConnection=Host=database;Port=5432;Database=TMDT;Username=postgres;Password=admin
@@ -74,8 +92,8 @@ services:
     container_name: localstack
     image: localstack/localstack:latest
     ports:
-      - "4566:4566" # main edge endpoint for all services
-      - "4571:4571"
+      - 4566:4566 # main edge endpoint for all services
+      - 4571:4571
     environment:
       # Enable all AWS free-tier services (you can add/remove as needed)
       - SERVICES=s3,lambda,sqs,sns,dynamodb,cloudwatch,cloudformation,iam,sts,events,secretsmanager,ssm
@@ -104,7 +122,7 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: TMDT
     ports:
-      - "8000:5432"
+      - 8000:5432
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql

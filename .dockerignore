@@ -13,3 +13,9 @@ appsettings.Development.json
 appsettings.Production.json
 appsettings.Staging.json
 *localstack*
+
+target/
+.git/
+.gitignore
+Dockerfile
+README.md
