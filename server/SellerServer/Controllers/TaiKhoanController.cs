@@ -14,11 +14,17 @@ namespace SellerServer.Controllers;
 
 [ApiController]
 [Route("api/tai-khoan")]
-public class TaiKhoanController(IConfiguration config, AppDbContext dbContext) : ControllerBase
+public class TaiKhoanController(IConfiguration config, AppDbContext dbContext, EmailService emailService) : ControllerBase
 {
-  private readonly IConfiguration _config = config;
-  private readonly AppDbContext dbContext = dbContext;
-
+  readonly IConfiguration _config = config;
+  readonly AppDbContext dbContext = dbContext;
+  readonly EmailService emailService = emailService;
+  [HttpPost("send")]
+  public async Task<IActionResult> SendEmail([FromQuery] string to, [FromQuery] string subject, [FromQuery] string body)
+  {
+    await emailService.SendEmailAsync(to, subject, body);
+    return Ok(new { Success = true, Message = "Email sent successfully." });
+  }
   [HttpPost("register")]
   public async Task<IActionResult> Register([FromBody] RegisterRequest request)
   {

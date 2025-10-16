@@ -3,7 +3,7 @@ using DatabaseModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+
 using Utilities;
 
 var builder = ServerTemplate.CreateTemplateServer(args);
@@ -16,7 +16,6 @@ builder.Services.AddSingleton<S3Service>(options =>
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-
   options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
 });
 
@@ -38,6 +37,14 @@ builder.Services.AddAuthentication(options =>
     ValidAudience = jwtSettings["Audience"],
     IssuerSigningKey = new SymmetricSecurityKey(key)
   };
+});
+
+builder.Services.AddSingleton<EmailService>(options =>
+{
+  var config = options.GetRequiredService<IConfiguration>();
+  var mailConfig = config.GetSection("MailSettings").Get<EmailSettings>()!;
+
+  return new(mailConfig);
 });
 
 var app = builder.Build();
